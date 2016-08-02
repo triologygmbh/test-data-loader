@@ -25,15 +25,12 @@ package de.triology.blog.testdataloader;
 
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
-import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertNotNull;
@@ -63,7 +60,7 @@ public class TestDataLoaderTest {
     private <T> T loadDefaultTestDataAndCallGetEntityByName(String entityName, Class<T> entityClass) {
         EntityManager entityManagerMock = createTransactionalEntityManagerMock();
         TestDataLoader testDataLoader = new TestDataLoader(entityManagerMock);
-        testDataLoader.loadTestData(Arrays.asList("testEntityDefinitions.groovy"));
+        testDataLoader.loadTestData(Collections.singletonList("testEntityDefinitions.groovy"));
         return testDataLoader.getEntityByName(entityName, entityClass);
     }
 
@@ -72,7 +69,7 @@ public class TestDataLoaderTest {
         EntityManager entityManagerMock = createTransactionalEntityManagerMock();
         when(entityManagerMock.createNativeQuery(anyString())).thenReturn(mock(Query.class));
         TestDataLoader testDataLoader = new TestDataLoader(entityManagerMock);
-        testDataLoader.loadTestData(Arrays.asList("testEntityDefinitions.groovy"));
+        testDataLoader.loadTestData(Collections.singletonList("testEntityDefinitions.groovy"));
         try {
             testDataLoader.getEntityByName("basicEntity", BasicTestEntity.class);
         } catch (NoSuchElementException e) {
