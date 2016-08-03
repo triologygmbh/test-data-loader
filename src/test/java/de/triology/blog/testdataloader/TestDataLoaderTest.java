@@ -61,7 +61,7 @@ public class TestDataLoaderTest {
     private <T> T loadDefaultTestDataAndCallGetEntityByName(String entityName, Class<T> entityClass) {
         EntityManager entityManagerMock = createTransactionalEntityManagerMock();
         TestDataLoader testDataLoader = new TestDataLoader(entityManagerMock);
-        testDataLoader.loadTestData(Collections.singletonList("testEntityDefinitions.groovy"));
+        testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
         return testDataLoader.getEntityByName(entityName, entityClass);
     }
 
@@ -70,7 +70,7 @@ public class TestDataLoaderTest {
         EntityManager entityManagerMock = createTransactionalEntityManagerMock();
         when(entityManagerMock.createNativeQuery(anyString())).thenReturn(mock(Query.class));
         TestDataLoader testDataLoader = new TestDataLoader(entityManagerMock);
-        testDataLoader.loadTestData(Collections.singletonList("testEntityDefinitions.groovy"));
+        testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
         try {
             testDataLoader.getEntityByName("basicEntity", BasicTestEntity.class);
         } catch (NoSuchElementException e) {

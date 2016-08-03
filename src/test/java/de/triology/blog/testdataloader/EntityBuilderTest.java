@@ -55,7 +55,7 @@ public class EntityBuilderTest {
     @Before
     public void setUp() throws Exception {
         builder = EntityBuilder.instance();
-        builder.buildEntities("testEntityDefinitions.groovy");
+        builder.buildEntities("tests/testEntityDefinitions.groovy");
     }
 
     @After
@@ -158,13 +158,13 @@ public class EntityBuilderTest {
 
     @Test(expected = EntityBuildingException.class)
     public void failsIfReferencedEntityDoesNotExist() throws Exception {
-        builder.buildEntities("failingBecauseOfMissingReferencedEntity.groovy");
+        builder.buildEntities("tests/failingBecauseOfMissingReferencedEntity.groovy");
     }
 
 
     @Test(expected = EntityBuildingException.class)
     public void failsIfAnEntityNameHasAlreadyBeenUsed() throws Exception {
-        builder.buildEntities("failingBecauseOfReusedName.groovy");
+        builder.buildEntities("tests/failingBecauseOfReusedName.groovy");
     }
 
     @Test
@@ -198,7 +198,7 @@ public class EntityBuilderTest {
                 entitiesInOrderOfCreation.add(entity);
             }
         });
-        builder.buildEntities("testOrderOfEntityCreatedListenerNotifications.groovy");
+        builder.buildEntities("tests/testOrderOfEntityCreatedListenerNotifications.groovy");
         assertEquals(4, entitiesInOrderOfCreation.size());
         assertEquals(BasicTestEntity.class, entitiesInOrderOfCreation.get(0).getClass());
         assertEquals(TestEntityWithToOneRelationship.class, entitiesInOrderOfCreation.get(1).getClass());

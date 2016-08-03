@@ -47,7 +47,7 @@ public class Demo {
         entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         testDataLoader = new TestDataLoader(entityManager);
-        testDataLoader.loadTestData(Collections.singletonList("testData.groovy"));
+        testDataLoader.loadTestData(Collections.singletonList("demo/testData.groovy"));
     }
 
     @After
