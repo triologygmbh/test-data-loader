@@ -21,10 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package de.triology.blog.testdataloader;
+package de.triology.blog.testdataloader.demo;
 
-import de.triology.blog.testdataloader.entities.Department;
-import de.triology.blog.testdataloader.entities.User;
+import de.triology.blog.testdataloader.TestDataLoader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

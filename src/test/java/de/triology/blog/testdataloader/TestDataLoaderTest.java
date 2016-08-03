@@ -23,6 +23,7 @@
  */
 package de.triology.blog.testdataloader;
 
+import de.triology.blog.testdataloader.TestDataLoader;
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
 import org.junit.Test;
