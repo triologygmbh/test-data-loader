@@ -74,3 +74,6 @@ assert "Pan".equals(peter.getLastName());
 User tinker = testDataLoader.getEntityByName("Tinker", User.class);
 assert "Bell".equals(tinker.getLastName());
 ```
+
+### Clean up afterwards
+To reset the database as well as the TestDataLoader to a clean state after a test case simply call `testDataLoader.clear()`. That will delete all created entites from the database and from TestDataLoader's entity cache.
