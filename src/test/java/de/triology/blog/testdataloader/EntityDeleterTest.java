@@ -25,16 +25,20 @@ package de.triology.blog.testdataloader;
 
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.Matchers;
 
 import javax.persistence.EntityManager;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class EntityDeleterTest {
 
     @Test
-    public void deletesAllCreatedEntitesInReversedOrder() throws Exception {
+    public void deletesAllCreatedEntitiesInReversedOrder() throws Exception {
         EntityManager entityManager = mock(EntityManager.class);
         EntityDeleter entityDeleter = new EntityDeleter(entityManager);
 
@@ -52,4 +56,18 @@ public class EntityDeleterTest {
         inOrder.verify(entityManager).remove(entity2);
         inOrder.verify(entityManager).remove(entity1);
     }
+
+    @Test
+    public void deletesAnEntityOnlyOnce() throws Exception {
+        EntityManager entityManager = mock(EntityManager.class);
+        EntityDeleter entityDeleter = new EntityDeleter(entityManager);
+        Object entity = new Object();
+        entityDeleter.entityCreated(entity);
+
+        entityDeleter.deleteAllEntities();
+        entityDeleter.deleteAllEntities();
+
+        verify(entityManager, times(1)).remove(any());
+    }
+
 }
