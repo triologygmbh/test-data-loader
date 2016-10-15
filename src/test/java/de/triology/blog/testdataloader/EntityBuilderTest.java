@@ -35,6 +35,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -55,7 +56,11 @@ public class EntityBuilderTest {
     @Before
     public void setUp() throws Exception {
         builder = EntityBuilder.instance();
-        builder.buildEntities("tests/testEntityDefinitions.groovy");
+        callBuildEntitiesWithFile("tests/testEntityDefinitions.groovy");
+    }
+
+    private void callBuildEntitiesWithFile(String file) throws FileNotFoundException {
+        builder.buildEntities(FileReader.create(file));
     }
 
     @After
@@ -158,13 +163,13 @@ public class EntityBuilderTest {
 
     @Test(expected = EntityBuildingException.class)
     public void failsIfReferencedEntityDoesNotExist() throws Exception {
-        builder.buildEntities("tests/failingBecauseOfMissingReferencedEntity.groovy");
+        callBuildEntitiesWithFile("tests/failingBecauseOfMissingReferencedEntity.groovy");
     }
 
 
     @Test(expected = EntityBuildingException.class)
     public void failsIfAnEntityNameHasAlreadyBeenUsed() throws Exception {
-        builder.buildEntities("tests/failingBecauseOfReusedName.groovy");
+        callBuildEntitiesWithFile("tests/failingBecauseOfReusedName.groovy");
     }
 
     @Test
@@ -198,7 +203,7 @@ public class EntityBuilderTest {
                 entitiesInOrderOfCreation.add(entity);
             }
         });
-        builder.buildEntities("tests/testOrderOfEntityCreatedListenerNotifications.groovy");
+        callBuildEntitiesWithFile("tests/testOrderOfEntityCreatedListenerNotifications.groovy");
         assertEquals(4, entitiesInOrderOfCreation.size());
         assertEquals(BasicTestEntity.class, entitiesInOrderOfCreation.get(0).getClass());
         assertEquals(TestEntityWithToOneRelationship.class, entitiesInOrderOfCreation.get(1).getClass());

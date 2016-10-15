@@ -49,39 +49,19 @@ class EntityBuilder {
     }
 
     /**
-     * Builds the entities defined in the specified file.
+     * Builds the entities defined in the provided by the passed Reader.
      *
-     * @param entityDefinitionFile String - the name of the file containing the entity definitions; the file must be in
-     * the classpath
+     * @param entityDefinitionReader Reader - a Reader for the file containing the entity definitions
      */
-    protected void buildEntities(String entityDefinitionFile) {
-        DelegatingScript script = createExecutableScriptFromEntityDefinition(entityDefinitionFile)
+    protected void buildEntities(Reader entityDefinitionReader) {
+        DelegatingScript script = createExecutableScriptFromEntityDefinition(entityDefinitionReader)
         script.setDelegate(this)
         script.run()
     }
 
-    private DelegatingScript createExecutableScriptFromEntityDefinition(String entityDefinitionFile) {
-        InputStreamReader entityDefinitionReader = createReaderForEntityDefinitionFile(entityDefinitionFile)
+    private DelegatingScript createExecutableScriptFromEntityDefinition(Reader entityDefinitionReader) {
         GroovyShell shell = createGroovyShell()
         return (DelegatingScript) shell.parse(entityDefinitionReader)
-    }
-
-    private InputStreamReader createReaderForEntityDefinitionFile(String entityDefinitionFile) {
-        URI entityDefinitionFileUri = getUriForEntityDefinition(entityDefinitionFile)
-        return createUtf8Reader(entityDefinitionFileUri)
-    }
-
-    private URI getUriForEntityDefinition(String entityDefinitionFile) {
-        URL entityDefinitionFileUrl = getClass().getClassLoader().getResource(entityDefinitionFile)
-        if (entityDefinitionFileUrl == null) {
-            throw new RuntimeException("entity definition File cannot be found in classpath: " + entityDefinitionFile);
-        }
-        return entityDefinitionFileUrl.toURI()
-    }
-
-    private InputStreamReader createUtf8Reader(URI entityDefinitionFileUri) {
-        InputStream inputStream = new FileInputStream(new File(entityDefinitionFileUri))
-        return new InputStreamReader(inputStream, "UTF-8");
     }
 
     private GroovyShell createGroovyShell() {

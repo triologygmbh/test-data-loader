@@ -50,7 +50,7 @@ class TestDataLoader {
         entityBuilder.addEntityCreatedListener(persister)
         withTransaction {
             entityDefinitionFiles.each {
-                entityBuilder.buildEntities(it)
+                entityBuilder.buildEntities(FileReader.create(it))
             }
         }
         entityBuilder.removeEntityCreatedListener(persister)
