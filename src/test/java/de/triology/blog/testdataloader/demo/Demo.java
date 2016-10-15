@@ -45,16 +45,15 @@ public class Demo {
     public void setUp() throws Exception {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("testdataloader");
         entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
         testDataLoader = new TestDataLoader(entityManager);
         testDataLoader.loadTestData(Collections.singletonList("demo/testData.groovy"));
     }
 
     @After
     public void tearDown() throws Exception {
-        entityManager.flush();
-        entityManager.getTransaction().rollback();
         testDataLoader.clear();
+        assertEquals(0L, entityManager.createQuery("select count(u) from User u").getSingleResult());
+        assertEquals(0L, entityManager.createQuery("select count(d) from Department d").getSingleResult());
     }
 
     @Test
