@@ -33,10 +33,12 @@ class TestDataLoader {
 
     private EntityManager entityManager
     private EntityBuilder entityBuilder
+    private EntityDeleter entityDeleter
 
     TestDataLoader(EntityManager entityManager) {
         this.entityManager = entityManager
         entityBuilder = EntityBuilder.instance()
+        entityDeleter = new EntityDeleter(entityManager)
     }
 
     /**
@@ -46,14 +48,22 @@ class TestDataLoader {
      * definitions; the files must be in the classpath
      */
     void loadTestData(Collection<String> entityDefinitionFiles) {
-        EntityPersister persister = new EntityPersister(entityManager)
-        entityBuilder.addEntityCreatedListener(persister)
-        withTransaction {
+        withEntityPersisterAndDeleterListeningInTransaction {
             entityDefinitionFiles.each {
                 entityBuilder.buildEntities(FileReader.create(it))
             }
         }
+    }
+
+    private withEntityPersisterAndDeleterListeningInTransaction(Closure closure) {
+        EntityPersister persister = new EntityPersister(entityManager)
+        entityBuilder.addEntityCreatedListener(persister)
+        entityBuilder.addEntityCreatedListener(entityDeleter)
+        withTransaction {
+            closure()
+        }
         entityBuilder.removeEntityCreatedListener(persister)
+        entityBuilder.removeEntityCreatedListener(entityDeleter)
     }
 
     /**
@@ -78,9 +88,9 @@ class TestDataLoader {
      */
     void clear() {
         withTransaction {
-            // TODO clear database ...
+            entityDeleter.deleteAllEntities()
+            entityBuilder.clear();
         }
-        entityBuilder.clear();
     }
 
     private void withTransaction(Closure doWithinTransaction) {

@@ -26,7 +26,9 @@ package de.triology.blog.testdataloader;
 import de.triology.blog.testdataloader.TestDataLoader;
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -36,11 +38,23 @@ import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class TestDataLoaderTest {
+
+    private TestDataLoader testDataLoader;
+    private EntityManager entityManagerMock;
+
+    @Before
+    public void setUp() throws Exception {
+        entityManagerMock = createTransactionalEntityManagerMock();
+        testDataLoader = new TestDataLoader(entityManagerMock);
+    }
 
     @Test
     public void getsCreatedEntityByName() throws Exception {
@@ -59,17 +73,12 @@ public class TestDataLoaderTest {
     }
 
     private <T> T loadDefaultTestDataAndCallGetEntityByName(String entityName, Class<T> entityClass) {
-        EntityManager entityManagerMock = createTransactionalEntityManagerMock();
-        TestDataLoader testDataLoader = new TestDataLoader(entityManagerMock);
         testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
         return testDataLoader.getEntityByName(entityName, entityClass);
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void clearsEntities() throws Exception {
-        EntityManager entityManagerMock = createTransactionalEntityManagerMock();
-        when(entityManagerMock.createNativeQuery(anyString())).thenReturn(mock(Query.class));
-        TestDataLoader testDataLoader = new TestDataLoader(entityManagerMock);
+    public void clearsEntitiesFromMemory() throws Exception {
         testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
         try {
             testDataLoader.getEntityByName("basicEntity", BasicTestEntity.class);
@@ -80,6 +89,13 @@ public class TestDataLoaderTest {
 
         testDataLoader.clear();
         testDataLoader.getEntityByName("basicEntity", BasicTestEntity.class);
+    }
+
+    @Test
+    public void clearsEntitiesFromDatabase() throws Exception {
+        testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
+        testDataLoader.clear();
+        verify(entityManagerMock, times(12)).remove(any());
     }
 
     private EntityManager createTransactionalEntityManagerMock() {
