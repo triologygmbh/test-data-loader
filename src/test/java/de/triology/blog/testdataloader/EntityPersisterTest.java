@@ -23,7 +23,6 @@
  */
 package de.triology.blog.testdataloader;
 
-import de.triology.blog.testdataloader.EntityPersister;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
