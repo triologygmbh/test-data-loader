@@ -8,11 +8,14 @@ Entities are defined in separate .groovy files using the DSL syntax. Those entit
 ## Usage
 An example entity definition can be found here: https://github.com/triologygmbh/test-data-loader/blob/master/src/test/resources/demo/testData.groovy
 
-And `de.triology.blog.testdataloader.demo.Demo` shows how to load that file. (Notice that `Demo` is a Java class.)
+And [`de.triology.blog.testdataloader.demo.Demo`](https://github.com/triologygmbh/test-data-loader/blob/master/src/test/java/de/triology/blog/testdataloader/demo/Demo.java) shows how to load that file. (Notice that `Demo` is a Java class.)
 
 ### Entity Definitions
-Use the following syntax to create and persist a `User` entity. The entitiy will be registered under the name "Peter".
+Use the following syntax in a separate .groovy file to define a `User` entity. The entitiy will be created, persisted and registered under the name "Peter" when the definition file is loaded.
 ```Groovy
+import static de.triology.blog.testdataloader.EntityBuilder.create
+import de.triology.blog.testdataloader.demo.User
+
 create User, 'Peter', {
     id = 123
     firstName = 'Peter'
@@ -23,6 +26,10 @@ create User, 'Peter', {
 ```
 Create nested entities by simply nesting their definitions:
 ```Groovy
+import static de.triology.blog.testdataloader.EntityBuilder.create
+import de.triology.blog.testdataloader.demo.User
+import de.triology.blog.testdataloader.demo.Department
+
 create User, 'Peter', {
     // ...
     department = create Department, 'lostBoys', {
@@ -33,6 +40,10 @@ create User, 'Peter', {
 ```
 And reference previously created entities by their name like so: 
 ```Groovy
+import static de.triology.blog.testdataloader.EntityBuilder.create
+import de.triology.blog.testdataloader.demo.User
+import de.triology.blog.testdataloader.demo.Department
+
 create User, 'Peter', {
     // ...
     department = create Department, 'lostBoys', {
