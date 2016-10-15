@@ -23,11 +23,13 @@
  */
 package de.triology.blog.testdataloader
 
+import groovy.transform.PackageScope
 import org.codehaus.groovy.control.CompilerConfiguration
 
 /**
  * Builder that takes the name of a file containing entity definitions and builds the entities accordingly.
  */
+@PackageScope
 class EntityBuilder {
 
     private static EntityBuilder singletonInstance;
@@ -37,7 +39,11 @@ class EntityBuilder {
 
     private EntityBuilder() {}
 
-    static EntityBuilder instance() {
+    /**
+     * Gets the EntityBuilder singleton instance
+     * @return EntityBuilder
+     */
+    protected static EntityBuilder instance() {
         singletonInstance = singletonInstance ?: new EntityBuilder();
         return singletonInstance
     }
@@ -48,7 +54,7 @@ class EntityBuilder {
      * @param entityDefinitionFile String - the name of the file containing the entity definitions; the file must be in
      * the classpath
      */
-    void buildEntities(String entityDefinitionFile) {
+    protected void buildEntities(String entityDefinitionFile) {
         DelegatingScript script = createExecutableScriptFromEntityDefinition(entityDefinitionFile)
         script.setDelegate(this)
         script.run()
@@ -93,7 +99,7 @@ class EntityBuilder {
      * @param entityData
      * @return the created entity
      */
-    static <T> T create(@DelegatesTo.Target Class<T> entityClass, String entityName,
+    protected static <T> T create(@DelegatesTo.Target Class<T> entityClass, String entityName,
                         @DelegatesTo(strategy = Closure.DELEGATE_FIRST, genericTypeIndex = 0) Closure entityData = {}) {
         return instance().createEntity(entityClass, entityName, entityData);
     }
@@ -149,7 +155,7 @@ class EntityBuilder {
      * Adds an {@link EntityCreatedListener} that gets notified every time an entity is completely created.
      * @param listener {@link EntityCreatedListener}
      */
-    void addEntityCreatedListener(EntityCreatedListener listener) {
+    protected void addEntityCreatedListener(EntityCreatedListener listener) {
         entityCreatedListeners += listener
     }
 
@@ -157,7 +163,7 @@ class EntityBuilder {
      * Removes the {@link EntityCreatedListener}
      * @param listener {@link EntityCreatedListener}
      */
-    void removeEntityCreatedListener(EntityCreatedListener listener) {
+    protected void removeEntityCreatedListener(EntityCreatedListener listener) {
         entityCreatedListeners -= listener
     }
 
@@ -196,7 +202,7 @@ class EntityBuilder {
     /**
      * Clears all previously built entities.
      */
-    void clear() {
+    protected void clear() {
         entitiesByName.clear()
     }
 }
