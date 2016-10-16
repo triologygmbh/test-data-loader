@@ -59,6 +59,22 @@ create User, 'Tinker', {
     department = lostBoys
 }
 ```
+Since entity definition files are just plain Groovy scripts you are free to use any control structures like loops and conditions, e.g.:
+```Groovy
+import static de.triology.blog.testdataloader.EntityBuilder.create
+import de.triology.blog.testdataloader.demo.User
+
+5.times { count ->
+    create User, "user_$count", {
+        id = 1000 + count
+        if(count % 2 == 0) {
+            firstName = "even_$count"
+        } else {
+            firstName = "odd_$count"
+        }
+    }
+}
+```
 
 ### Loading entity definitions
 Use the `de.triology.blog.testdataloader.TestDataLoader` to load entitiy definition files and persist the defined entities. 
