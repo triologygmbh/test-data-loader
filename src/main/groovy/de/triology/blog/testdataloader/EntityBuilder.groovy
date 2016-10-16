@@ -79,7 +79,7 @@ class EntityBuilder {
      * @param entityData
      * @return the created entity
      */
-    protected static <T> T create(@DelegatesTo.Target Class<T> entityClass, String entityName,
+    static <T> T create(@DelegatesTo.Target Class<T> entityClass, String entityName,
                         @DelegatesTo(strategy = Closure.DELEGATE_FIRST, genericTypeIndex = 0) Closure entityData = {}) {
         return instance().createEntity(entityClass, entityName, entityData);
     }
