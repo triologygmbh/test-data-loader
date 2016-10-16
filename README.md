@@ -11,7 +11,7 @@ An example entity definition can be found here: https://github.com/triologygmbh/
 And [`de.triology.blog.testdataloader.demo.Demo`](https://github.com/triologygmbh/test-data-loader/blob/master/src/test/java/de/triology/blog/testdataloader/demo/Demo.java) shows how to load that file. (Notice that `Demo` is a Java class.)
 
 ### Entity Definitions
-Use the following syntax in a separate .groovy file to define a `User` entity. The entitiy will be created, persisted and registered under the name "Peter" when the definition file is loaded.
+Use the following syntax in a separate .groovy file to define a `User` entity. The entitiy will be created, persisted and registered under the name "Peter" when the definition file is loaded. _**Note:** Entity definition files are expected to be UTF-8 encoded._
 ```Groovy
 import static de.triology.blog.testdataloader.EntityBuilder.create
 import de.triology.blog.testdataloader.demo.User
