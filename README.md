@@ -3,7 +3,7 @@ A Groovy DSL for creating test data via JPA
 
 ## Overview
 This project implements a Groovy DSL that can be used to populate a database using JPA entities. Its indented use is testing but it could be used in other scenarios as well.
-The DSL is implemented in Groovy but can be used from pure Java. Entities are modularly defined in separate .groovy files using the DSL syntax. Those entitiy definition files can then be loaded as needed using the `de.triology.blog.testdataloader.TestDataLoader`, which also provides access to loaded entities. Thus, the client code does not need to deal with any database or JPA specific concerns other than proving an initialized EntityManager.
+The DSL is implemented in Groovy but can be used from pure Java. Entities are modularly defined in separate .groovy files using the DSL syntax. Those entitiy definition files can then be loaded as needed using the `de.triology.blog.testdataloader.TestDataLoader`, which also provides access to loaded entities. Thus, the client code does not need to deal with any database or JPA specific concerns other than providing an initialized EntityManager.
 
 ## Usage
 An example entity definition can be found here: https://github.com/triologygmbh/test-data-loader/blob/master/src/test/resources/demo/testData.groovy
