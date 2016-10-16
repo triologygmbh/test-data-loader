@@ -35,6 +35,12 @@ class TestDataLoader {
     private EntityBuilder entityBuilder
     private EntityDeleter entityDeleter
 
+    /**
+     * Create a new TestDataLoader that uses the specified JPA EntityManager to save and delete entities.
+     * The EntityManager is expected to be fully initialized and ready to use.
+     *
+     * @param entityManager {@link EntityManager}
+     */
     TestDataLoader(EntityManager entityManager) {
         this.entityManager = entityManager
         entityBuilder = EntityBuilder.instance()
@@ -45,7 +51,7 @@ class TestDataLoader {
      * Loads the entities defined in the passed {@code entityDefinitionFiles} into the database.
      *
      * @param entityDefinitionFiles {@link Collection} of Strings - the names of files containing the entity
-     * definitions; the files must be in the classpath
+     * definitions. The files are expected to be UTF-8 encoded.
      */
     void loadTestData(Collection<String> entityDefinitionFiles) {
         withEntityPersisterAndDeleterListeningInTransaction {
