@@ -29,7 +29,6 @@ import org.codehaus.groovy.control.CompilerConfiguration
 /**
  * Builder that takes the name of a file containing entity definitions and builds the entities accordingly.
  */
-@PackageScope
 class EntityBuilder {
 
     private static EntityBuilder singletonInstance;
