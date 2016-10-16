@@ -5,6 +5,28 @@ A Groovy DSL for creating test data via JPA
 This project implements a Groovy DSL that can be used to populate a database using JPA entities. Its indented use is testing but it could be used in other scenarios as well.
 The DSL is implemented in Groovy but can be used from pure Java. Entities are modularly defined in separate .groovy files using the DSL syntax. Those entitiy definition files can then be loaded as needed using the `de.triology.blog.testdataloader.TestDataLoader`, which also provides access to loaded entities. Thus, the client code does not need to deal with any database or JPA specific concerns other than providing an initialized EntityManager.
 
+## Configuration
+You can use JitPack to configure the test-data-loader as a dependency in your project (using maven, gradle, sbt or leiningen).<br/>
+For example when using maven, define the JitPack repository:
+```XML
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+And the test-data-loader dependency:
+```XML
+<dependency>
+    <groupId>com.github.triologygmbh</groupId>
+    <artifactId>test-data-loader</artifactId>
+    <version>v0.1</version>
+</dependency>
+```
+Current version is `v0.1`.<br/>
+For further details and options refer to the [JitPack website](https://jitpack.io/).
+
 ## Usage
 An example entity definition can be found here: https://github.com/triologygmbh/test-data-loader/blob/master/src/test/resources/demo/testData.groovy
 
@@ -77,7 +99,7 @@ import de.triology.blog.testdataloader.demo.User
 ```
 
 ### Loading entity definitions
-Use the `de.triology.blog.testdataloader.TestDataLoader` to load entitiy definition files and persist the defined entities. 
+Use the `de.triology.blog.testdataloader.TestDataLoader` to load entitiy definition files (from classpath or file system) and persist the defined entities. 
 The `TestDataLoader` requires a fully initialized, ready-to-use entitiy manager and can then be used to load entity definition files and access the persisted entities.
 ```Java
 EntityManager entityManager = // ... init EntityManager
