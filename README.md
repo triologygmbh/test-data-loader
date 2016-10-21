@@ -25,7 +25,7 @@ And the test-data-loader dependency:
 </dependency>
 ```
 Current version is `v0.1`.<br/> 
-For further details and options refer to the [JitPack website](https://jitpack.io/).
+For further details and options refer to the [JitPack website](https://jitpack.io/#triologygmbh/test-data-loader).
 
 ## Usage
 An example entity definition can be found here: https://github.com/triologygmbh/test-data-loader/blob/master/src/test/resources/demo/testData.groovy
