@@ -6,7 +6,7 @@ This project implements a Groovy DSL that can be used to populate a database usi
 The DSL is implemented in Groovy but can be used from pure Java. Entities are modularly defined in separate .groovy files using the DSL syntax. Those entitiy definition files can then be loaded as needed using the `de.triology.blog.testdataloader.TestDataLoader`, which also provides access to loaded entities. Thus, the client code does not need to deal with any database or JPA specific concerns other than providing an initialized EntityManager.
 
 ## Configuration
-You can use JitPack to configure the test-data-loader as a dependency in your project (using maven, gradle, sbt or leiningen).<br/>
+You can use JitPack to configure the test-data-loader as a dependency in your project.<br/>
 For example when using maven, define the JitPack repository:
 ```XML
 <repositories>
