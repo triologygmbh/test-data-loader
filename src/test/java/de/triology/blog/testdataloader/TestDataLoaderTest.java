@@ -23,23 +23,19 @@
  */
 package de.triology.blog.testdataloader;
 
-import de.triology.blog.testdataloader.TestDataLoader;
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
