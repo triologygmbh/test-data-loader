@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2016 TRIOLOGY GmbH
@@ -56,6 +56,12 @@ public class TestDataLoaderTest {
         testDataLoader = new TestDataLoader(entityManagerMock);
     }
 
+    private EntityManager createTransactionalEntityManagerMock() {
+        EntityManager entityManagerMock = mock(EntityManager.class);
+        when(entityManagerMock.getTransaction()).thenReturn(mock(EntityTransaction.class));
+        return entityManagerMock;
+    }
+
     @Test
     public void getsCreatedEntityByName() throws Exception {
         BasicTestEntity entity = loadDefaultTestDataAndCallGetEntityByName("basicEntity", BasicTestEntity.class);
@@ -98,9 +104,10 @@ public class TestDataLoaderTest {
         verify(entityManagerMock, times(12)).remove(any());
     }
 
-    private EntityManager createTransactionalEntityManagerMock() {
-        EntityManager entityManagerMock = mock(EntityManager.class);
-        when(entityManagerMock.getTransaction()).thenReturn(mock(EntityTransaction.class));
-        return entityManagerMock;
+    @Test
+    public void copesWithIllegalStateExceptionWhenTryingToAccessAJTATransaction() throws Exception {
+        //noinspection unchecked
+        when(entityManagerMock.getTransaction()).thenThrow(IllegalStateException.class);
+        testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
     }
 }

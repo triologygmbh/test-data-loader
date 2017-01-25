@@ -23,6 +23,9 @@
  */
 package de.triology.blog.testdataloader
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import javax.persistence.EntityManager
 
 /**
@@ -30,6 +33,8 @@ import javax.persistence.EntityManager
  * makes the entities available by their names as defined in the entity definition files.
  */
 class TestDataLoader {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TestDataLoader)
 
     private EntityManager entityManager
     private EntityBuilder entityBuilder
@@ -100,7 +105,7 @@ class TestDataLoader {
     }
 
     private void withTransaction(Closure doWithinTransaction) {
-        if (!transactionIsActive()) {
+        if (newTransactionRequired()) {
             withNewTransaction(doWithinTransaction)
         } else {
             // Someone else is taking care of transaction handling
@@ -108,8 +113,13 @@ class TestDataLoader {
         }
     }
 
-    private boolean transactionIsActive() {
-        return entityManager.getTransaction().isActive()
+    private boolean newTransactionRequired() {
+        try {
+            return !entityManager.getTransaction().isActive()
+        } catch (IllegalStateException e) {
+            LOG.info('Caught IllegalStateException while accessing entityManager.getTransaction(). Assuming JTA transaction management', e)
+            return false;
+        }
     }
 
     private void withNewTransaction(Closure doWithinTransaction) {
