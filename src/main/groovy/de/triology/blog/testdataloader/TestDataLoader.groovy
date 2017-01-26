@@ -114,12 +114,13 @@ class TestDataLoader {
     }
 
     private boolean newTransactionRequired() {
-        try {
-            return !entityManager.getTransaction().isActive()
-        } catch (IllegalStateException e) {
-            LOG.info('Caught IllegalStateException while accessing entityManager.getTransaction(). Assuming JTA transaction management', e)
-            return false;
-        }
+        return false;
+//        try {
+//            return !entityManager.getTransaction().isActive()
+//        } catch (IllegalStateException e) {
+//            LOG.info('Caught IllegalStateException while accessing entityManager.getTransaction(). Assuming JTA transaction management', e)
+//            return false;
+//        }
     }
 
     private void withNewTransaction(Closure doWithinTransaction) {

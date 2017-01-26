@@ -26,6 +26,7 @@ package de.triology.blog.testdataloader;
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
@@ -41,6 +42,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class TestDataLoaderTest {
 
     private TestDataLoader testDataLoader;
