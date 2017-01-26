@@ -102,10 +102,30 @@ public class TestDataLoaderTest {
         verify(entityManagerMock, times(12)).remove(any());
     }
 
-    @Test
-    public void copesWithIllegalStateExceptionWhenTryingToAccessAJTATransaction() throws Exception {
+    @Test(expected = IllegalStateException.class)
+    public void expectsResourceLocalTransactionsWhenCreatedWithSingleArgConstructor() throws Exception {
         //noinspection unchecked
         when(entityManagerMock.getTransaction()).thenThrow(IllegalStateException.class);
+        new TestDataLoader(entityManagerMock);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void expectsResourceLocalTransactionsWhenSpecified() throws Exception {
+        //noinspection unchecked
+        when(entityManagerMock.getTransaction()).thenThrow(IllegalStateException.class);
+        new TestDataLoader(entityManagerMock, TestDataLoader.TransactionType.RESOURCE_LOCAL);
+    }
+
+    @Test
+    public void doesNotManageTransactionsIfTransactionTypeIsJTA() throws Exception {
+        //noinspection unchecked
+        when(entityManagerMock.getTransaction()).thenThrow(IllegalStateException.class);
+        testDataLoader = new TestDataLoader(entityManagerMock, TestDataLoader.TransactionType.JTA);
         testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transactionTypeMustNotBeNull() throws Exception {
+        new TestDataLoader(entityManagerMock, null);
     }
 }
