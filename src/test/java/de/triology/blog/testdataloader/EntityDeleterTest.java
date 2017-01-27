@@ -32,9 +32,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.persistence.EntityManager;
 
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,6 +50,7 @@ public class EntityDeleterTest {
     @Before
     public void setUp() throws Exception {
         entityDeleter = new EntityDeleter(entityManager);
+        when(entityManager.merge(any())).then(returnsFirstArg());
     }
 
     @Test
@@ -61,10 +62,6 @@ public class EntityDeleterTest {
         entityDeleter.entityCreated(entity1);
         entityDeleter.entityCreated(entity2);
         entityDeleter.entityCreated(entity3);
-
-        when(entityManager.merge(entity1)).thenReturn(entity1);
-        when(entityManager.merge(entity2)).thenReturn(entity2);
-        when(entityManager.merge(entity3)).thenReturn(entity3);
 
         entityDeleter.deleteAllEntities();
 
@@ -80,8 +77,6 @@ public class EntityDeleterTest {
         Object entity = new Object();
         entityDeleter.entityCreated(entity);
 
-        when(entityManager.merge(entity)).thenReturn(entity);
-
         entityDeleter.deleteAllEntities();
         entityDeleter.deleteAllEntities();
 
@@ -92,8 +87,6 @@ public class EntityDeleterTest {
     public void mergesEntitiesBeforeRemovingThem() throws Exception {
         Object entity = new Object();
         entityDeleter.entityCreated(entity);
-
-        when(entityManager.merge(entity)).thenReturn(entity);
 
         entityDeleter.deleteAllEntities();
 
