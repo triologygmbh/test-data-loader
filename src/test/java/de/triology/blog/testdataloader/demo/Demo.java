@@ -51,7 +51,7 @@ public class Demo {
 
     @After
     public void tearDown() throws Exception {
-        testDataLoader.clear();
+        testDataLoader.clearEntityCacheAndDatabase();
         assertEquals(0L, entityManager.createQuery("select count(u) from User u").getSingleResult());
         assertEquals(0L, entityManager.createQuery("select count(d) from Department d").getSingleResult());
     }

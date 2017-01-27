@@ -217,7 +217,7 @@ public class EntityBuilderTest {
             builder.getEntityByName("basicEntity", BasicTestEntity.class);
         } catch (NoSuchElementException e) {
             e.printStackTrace();
-            fail("basicEntity already was not available before calling clear");
+            fail("basicEntity already was not available before calling clearEntityCacheAndDatabase");
         }
 
         builder.clear();

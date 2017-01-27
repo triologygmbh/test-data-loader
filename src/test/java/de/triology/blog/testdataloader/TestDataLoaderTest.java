@@ -87,10 +87,10 @@ public class TestDataLoaderTest {
             testDataLoader.getEntityByName("basicEntity", BasicTestEntity.class);
         } catch (NoSuchElementException e) {
             e.printStackTrace();
-            fail("basicEntity already was not available before calling clear");
+            fail("basicEntity already was not available before calling clearEntityCacheAndDatabase");
         }
 
-        testDataLoader.clear();
+        testDataLoader.clearEntityCacheAndDatabase();
         testDataLoader.getEntityByName("basicEntity", BasicTestEntity.class);
     }
 
@@ -98,7 +98,7 @@ public class TestDataLoaderTest {
     public void clearsEntitiesFromDatabase() throws Exception {
         when(entityManagerMock.merge(any())).then(returnsFirstArg());
         testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
-        testDataLoader.clear();
+        testDataLoader.clearEntityCacheAndDatabase();
         verify(entityManagerMock, times(12)).remove(any());
     }
 

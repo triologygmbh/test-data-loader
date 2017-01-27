@@ -57,7 +57,7 @@ class TestDataLoader {
 
     // TODO: javadoc -> hint that client needs to take care of transaction management when JTA is specified
     TestDataLoader(EntityManager entityManager, TransactionType transactionType) {
-        if(transactionType == null) throw new IllegalArgumentException("transactionType must not be null")
+        if (transactionType == null) throw new IllegalArgumentException("transactionType must not be null")
         checkTransactionType(entityManager, transactionType)
         this.entityManager = entityManager
         entityBuilder = EntityBuilder.instance()
@@ -66,13 +66,13 @@ class TestDataLoader {
     }
 
     private void checkTransactionType(EntityManager entityManager, TransactionType transactionType) {
-        if(transactionType == TransactionType.RESOURCE_LOCAL) {
+        if (transactionType == TransactionType.RESOURCE_LOCAL) {
             makeSureTransactionsAreResourceLocal(entityManager)
         }
     }
 
     private static void makeSureTransactionsAreResourceLocal(EntityManager entityManager) {
-        try{
+        try {
             entityManager.getTransaction()
         } catch (IllegalStateException e) {
             throw new IllegalStateException(
@@ -128,11 +128,19 @@ class TestDataLoader {
      * Clears all previously built entities so that they are no longer available through the {@code getEntityByName}
      * method and deletes all data from the database.
      */
-    void clear() {
+    void clearEntityCacheAndDatabase() {
         withTransaction {
             entityDeleter.deleteAllEntities()
-            entityBuilder.clear();
+            clearEntityCache()
         }
+    }
+
+    /**
+     * Clears all previously built entities so that they are no longer available through the {@code getEntityByName}
+     * method.
+     */
+    void clearEntityCache() {
+        entityBuilder.clear();
     }
 
     private void withTransaction(Closure doWithinTransaction) {
