@@ -26,7 +26,6 @@ package de.triology.blog.testdataloader;
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
@@ -36,6 +35,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -96,6 +96,7 @@ public class TestDataLoaderTest {
 
     @Test
     public void clearsEntitiesFromDatabase() throws Exception {
+        when(entityManagerMock.merge(any())).then(returnsFirstArg());
         testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
         testDataLoader.clear();
         verify(entityManagerMock, times(12)).remove(any());
