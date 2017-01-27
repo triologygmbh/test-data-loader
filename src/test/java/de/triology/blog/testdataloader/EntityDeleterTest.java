@@ -35,6 +35,7 @@ import javax.persistence.EntityManager;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -79,6 +80,8 @@ public class EntityDeleterTest {
         Object entity = new Object();
         entityDeleter.entityCreated(entity);
 
+        when(entityManager.merge(entity)).thenReturn(entity);
+
         entityDeleter.deleteAllEntities();
         entityDeleter.deleteAllEntities();
 
@@ -87,7 +90,6 @@ public class EntityDeleterTest {
 
     @Test
     public void mergesEntitiesBeforeRemovingThem() throws Exception {
-        EntityDeleter entityDeleter = new EntityDeleter(entityManager);
         Object entity = new Object();
         entityDeleter.entityCreated(entity);
 
@@ -99,4 +101,15 @@ public class EntityDeleterTest {
         inOrder.verify(entityManager).merge(entity);
         inOrder.verify(entityManager).remove(entity);
     }
+
+    @Test
+    public void doesNotDeleteAlreadyRemovedEntities() throws Exception {
+        Object entity = new Object();
+        entityDeleter.entityCreated(entity);
+        when(entityManager.merge(entity)).thenThrow(IllegalArgumentException.class);
+
+        entityDeleter.deleteAllEntities();
+        verify(entityManager, never()).remove(entity);
+    }
+
 }

@@ -24,6 +24,8 @@
 package de.triology.blog.testdataloader
 
 import groovy.transform.PackageScope
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import javax.persistence.EntityManager
 
@@ -33,6 +35,8 @@ import javax.persistence.EntityManager
  */
 @PackageScope
 class EntityDeleter implements EntityCreatedListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EntityDeleter)
 
     private EntityManager entityManager
     private Stack entities;
@@ -61,9 +65,22 @@ class EntityDeleter implements EntityCreatedListener {
      */
     protected deleteAllEntities() {
         while(!entities.empty()) {
-            def entity = entityManager.merge(entities.pop())
-            entityManager.remove(entity)
+            def entity = prepareNextEntityForDeletion()
+            if(entity) {
+                entityManager.remove(entity)
+            }
         }
     }
+
+    private prepareNextEntityForDeletion() {
+        def entity = entities.pop()
+        try {
+            return entityManager.merge(entity)
+        } catch (IllegalArgumentException e) {
+            LOG.debug("caught IllegalArgumentException when merging entity $entity, assuming it to be already removed", e)
+            return null
+        }
+    }
+
 
 }
