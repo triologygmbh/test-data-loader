@@ -61,7 +61,8 @@ class EntityDeleter implements EntityCreatedListener {
      */
     protected deleteAllEntities() {
         while(!entities.empty()) {
-            entityManager.remove(entities.pop())
+            def entity = entityManager.merge(entities.pop())
+            entityManager.remove(entity)
         }
     }
 

@@ -23,8 +23,12 @@
  */
 package de.triology.blog.testdataloader;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.persistence.EntityManager;
 
@@ -33,14 +37,22 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class EntityDeleterTest {
+
+    @Mock
+    EntityManager entityManager;
+    private EntityDeleter entityDeleter;
+
+    @Before
+    public void setUp() throws Exception {
+        entityDeleter = new EntityDeleter(entityManager);
+    }
 
     @Test
     public void deletesAllCreatedEntitiesInReversedOrder() throws Exception {
-        EntityManager entityManager = mock(EntityManager.class);
-        EntityDeleter entityDeleter = new EntityDeleter(entityManager);
-
         Object entity1 = new Object();
         Object entity2 = new Object();
         Object entity3 = new Object();
@@ -48,6 +60,11 @@ public class EntityDeleterTest {
         entityDeleter.entityCreated(entity1);
         entityDeleter.entityCreated(entity2);
         entityDeleter.entityCreated(entity3);
+
+        when(entityManager.merge(entity1)).thenReturn(entity1);
+        when(entityManager.merge(entity2)).thenReturn(entity2);
+        when(entityManager.merge(entity3)).thenReturn(entity3);
+
         entityDeleter.deleteAllEntities();
 
         InOrder inOrder = inOrder(entityManager);
@@ -58,7 +75,6 @@ public class EntityDeleterTest {
 
     @Test
     public void deletesAnEntityOnlyOnce() throws Exception {
-        EntityManager entityManager = mock(EntityManager.class);
         EntityDeleter entityDeleter = new EntityDeleter(entityManager);
         Object entity = new Object();
         entityDeleter.entityCreated(entity);
@@ -69,4 +85,18 @@ public class EntityDeleterTest {
         verify(entityManager, times(1)).remove(any());
     }
 
+    @Test
+    public void mergesEntitiesBeforeRemovingThem() throws Exception {
+        EntityDeleter entityDeleter = new EntityDeleter(entityManager);
+        Object entity = new Object();
+        entityDeleter.entityCreated(entity);
+
+        when(entityManager.merge(entity)).thenReturn(entity);
+
+        entityDeleter.deleteAllEntities();
+
+        InOrder inOrder = inOrder(entityManager);
+        inOrder.verify(entityManager).merge(entity);
+        inOrder.verify(entityManager).remove(entity);
+    }
 }
