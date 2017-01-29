@@ -98,7 +98,7 @@ class TestDataLoader {
             throw new IllegalStateException(
                     'TestDataLoader is configured with RESOURCE_LOCAL transactions but the supplied EntityManager uses ' +
                             'JTA transactions. Use the TestDataLoader#TestDataLoader(EntityManager, TransactionType) ' +
-                            'constructor to specify that JTA transactions are beeing used. Note that the client code ' +
+                            'constructor to specify that JTA transactions are being used. Note that the client code ' +
                             'needs to take care of transaction management in this case.', e)
         }
     }
