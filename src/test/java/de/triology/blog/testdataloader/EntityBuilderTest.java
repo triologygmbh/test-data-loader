@@ -23,9 +23,6 @@
  */
 package de.triology.blog.testdataloader;
 
-import de.triology.blog.testdataloader.EntityBuilder;
-import de.triology.blog.testdataloader.EntityBuildingException;
-import de.triology.blog.testdataloader.EntityCreatedListener;
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
 import de.triology.blog.testdataloader.testentities.TestEntityWithToManyRelationship;
@@ -36,18 +33,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class EntityBuilderTest {
 
@@ -56,6 +44,7 @@ public class EntityBuilderTest {
     @Before
     public void setUp() throws Exception {
         builder = EntityBuilder.instance();
+        builder.clear();
         callBuildEntitiesWithFile("tests/testEntityDefinitions.groovy");
     }
 
