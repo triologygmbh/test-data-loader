@@ -84,14 +84,28 @@ public class EntityDeleterTest {
     }
 
     @Test
-    public void mergesEntitiesBeforeRemovingThem() throws Exception {
+    public void mergesDetachedEntitiesBeforeRemovingThem() throws Exception {
         Object entity = new Object();
         entityDeleter.entityCreated(entity);
+        when(entityManager.contains(entity)).thenReturn(false);
 
         entityDeleter.deleteAllEntities();
 
         InOrder inOrder = inOrder(entityManager);
         inOrder.verify(entityManager).merge(entity);
+        inOrder.verify(entityManager).remove(entity);
+    }
+
+    @Test
+    public void doesNotMergeAttachedEntitiesBeforeRemovingThem() throws Exception {
+        Object entity = new Object();
+        entityDeleter.entityCreated(entity);
+        when(entityManager.contains(entity)).thenReturn(true);
+
+        entityDeleter.deleteAllEntities();
+
+        InOrder inOrder = inOrder(entityManager);
+        inOrder.verify(entityManager, never()).merge(entity);
         inOrder.verify(entityManager).remove(entity);
     }
 

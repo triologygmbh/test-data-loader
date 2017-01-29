@@ -75,12 +75,17 @@ class EntityDeleter implements EntityCreatedListener {
     private prepareNextEntityForDeletion() {
         def entity = entities.pop()
         try {
-            return entityManager.merge(entity)
+            return mergeNextEntityIfNotAttached(entity)
         } catch (IllegalArgumentException e) {
             LOG.debug("caught IllegalArgumentException when merging entity $entity, assuming it to be already removed", e)
             return null
         }
     }
 
-
+    private mergeNextEntityIfNotAttached(Object entity) {
+        if(!entityManager.contains(entity)) {
+            return entityManager.merge(entity)
+        }
+        return entity
+    }
 }
