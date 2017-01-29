@@ -34,6 +34,9 @@ import javax.persistence.EntityManager
  */
 class TestDataLoader {
 
+    /**
+     * Defines the transaction type that the {@link EntityManager} passed to the {@code TestDataLoader} is configured with.
+     */
     public enum TransactionType {
         RESOURCE_LOCAL, JTA
     }
@@ -46,8 +49,13 @@ class TestDataLoader {
     private TransactionType transactionType;
 
     /**
-     * Create a new TestDataLoader that uses the specified JPA EntityManager to save and delete entities.
-     * The EntityManager is expected to be fully initialized and ready to use.
+     * Creates a new TestDataLoader that uses the specified JPA EntityManager to save and delete entities.
+     * The EntityManager is expected to be fully initialized and ready to use.<br>
+     * <br>
+     * The {@code TestDataLoader} will assume a {@code TransactionType.RESOURCE_LOCAL} configuration when created with
+     * this constructor and therefore try an manage transactions itself. If this is undesired, e. g. in a container
+     * environment with managed persistence, use the {@code TestDataLoader(EntityManager, TransactionType)}
+     * constructor with {@code TransactionType.JTA} .
      *
      * @param entityManager {@link EntityManager}
      */
@@ -55,7 +63,19 @@ class TestDataLoader {
         this(entityManager, TransactionType.RESOURCE_LOCAL)
     }
 
-    // TODO: javadoc -> hint that client needs to take care of transaction management when JTA is specified
+    /**
+     * Creates a new TestDataLoader that uses the specified JPA EntityManager to save and delete entities.
+     * The EntityManager is expected to be configured with the specified transaction type and to be fully initialized
+     * and ready to use.<br>
+     * <br>
+     * Note that when specifying {@code TransactionType.RESOURCE_LOCAL}, the {@code TestDataLoader} will try and manage
+     * transactions itself. This might not be desired and even lead to runtime exceptions, e. g. in a container
+     * environment with managed persistence. Specify {@code TransactionType.JTA} in this case, the {@code TestDataLoader}
+     * will assume transactions to be managed by client code then.
+     *
+     * @param entityManager {@link EntityManager}
+     * @param transactionType {@link TransactionType}
+     */
     TestDataLoader(EntityManager entityManager, TransactionType transactionType) {
         if (transactionType == null) throw new IllegalArgumentException("transactionType must not be null")
         checkTransactionType(entityManager, transactionType)
