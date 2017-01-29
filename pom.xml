@@ -110,6 +110,9 @@
                                 <resource>
                                     <directory>src/main/groovy</directory>
                                 </resource>
+                                <resource>
+                                    <directory>src/test/groovy</directory>
+                                </resource>
                             </resources>
                         </configuration>
                     </execution>
