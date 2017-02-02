@@ -24,7 +24,7 @@ And the test-data-loader dependency:
     <version>v0.1</version>
 </dependency>
 ```
-Current version is `v0.1`.<br/> 
+Current version is [![](https://jitpack.io/v/triologygmbh/test-data-loader.svg)](https://jitpack.io/#triologygmbh/test-data-loader).<br/> 
 For further details and options refer to the [JitPack website](https://jitpack.io/#triologygmbh/test-data-loader).
 
 ## Usage
