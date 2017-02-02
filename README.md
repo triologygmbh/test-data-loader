@@ -21,7 +21,7 @@ And the test-data-loader dependency:
 <dependency>
     <groupId>com.github.triologygmbh</groupId>
     <artifactId>test-data-loader</artifactId>
-    <version>v0.1</version>
+    <version>v0.2</version>
 </dependency>
 ```
 Current version is [![](https://jitpack.io/v/triologygmbh/test-data-loader.svg)](https://jitpack.io/#triologygmbh/test-data-loader).<br/> 
