@@ -37,7 +37,7 @@ class TestDataLoader {
     /**
      * Defines the transaction type that the {@link EntityManager} passed to the {@code TestDataLoader} is configured with.
      */
-    public enum TransactionType {
+    enum TransactionType {
         RESOURCE_LOCAL, JTA
     }
 
@@ -46,7 +46,7 @@ class TestDataLoader {
     private EntityManager entityManager
     private EntityBuilder entityBuilder
     private EntityDeleter entityDeleter
-    private TransactionType transactionType;
+    private TransactionType transactionType
 
     /**
      * Creates a new TestDataLoader that uses the specified JPA EntityManager to save and delete entities.
@@ -54,7 +54,7 @@ class TestDataLoader {
      * <br>
      * The {@code TestDataLoader} will assume a {@code TransactionType.RESOURCE_LOCAL} configuration when created with
      * this constructor and therefore try an manage transactions itself. If this is undesired, e. g. in a container
-     * environment with managed persistence, use the {@code TestDataLoader(EntityManager, TransactionType)}
+     * environment with managed persistence, use the {@code TestDataLoader ( EntityManager , TransactionType )}
      * constructor with {@code TransactionType.JTA} .
      *
      * @param entityManager {@link EntityManager}
@@ -82,7 +82,7 @@ class TestDataLoader {
         this.entityManager = entityManager
         entityBuilder = EntityBuilder.instance()
         entityDeleter = new EntityDeleter(entityManager)
-        this.transactionType = transactionType;
+        this.transactionType = transactionType
     }
 
     private void checkTransactionType(EntityManager entityManager, TransactionType transactionType) {
@@ -113,6 +113,21 @@ class TestDataLoader {
         withEntityPersisterAndDeleterListeningInTransaction {
             entityDefinitionFiles.each {
                 entityBuilder.buildEntities(FileReader.create(it))
+            }
+        }
+    }
+
+    /**
+     * Loads the entities defined in the passed {@code entityDefinitionFiles} from the classpath into the database
+     * @param entityDefinitionFiles {@link Collection} of Strings - the names of files containing the entity
+     * definitions relative to the classpath. The files are expected to be UTF-8 encoded.
+     */
+    void loadTestDataFromClasspath(Collection<String> entityDefinitionFiles) {
+        withEntityPersisterAndDeleterListeningInTransaction {
+            entityDefinitionFiles.each {
+                InputStreamReader inputStreamReader = new InputStreamReader(
+                        getClass().getClassLoader().getResourceAsStream(it))
+                entityBuilder.buildEntities(inputStreamReader)
             }
         }
     }
@@ -160,7 +175,7 @@ class TestDataLoader {
      * method.
      */
     void clearEntityCache() {
-        entityBuilder.clear();
+        entityBuilder.clear()
     }
 
     private void withTransaction(Closure doWithinTransaction) {
@@ -168,7 +183,7 @@ class TestDataLoader {
             withNewTransaction(doWithinTransaction)
         } else {
             // Someone else is taking care of transaction handling
-            doWithinTransaction();
+            doWithinTransaction()
         }
     }
 
@@ -184,7 +199,7 @@ class TestDataLoader {
             entityManager.getTransaction().commit()
         } catch (Exception e) {
             e.printStackTrace()
-            entityManager.getTransaction().rollback();
+            entityManager.getTransaction().rollback()
         }
     }
 
