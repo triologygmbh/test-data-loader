@@ -1,4 +1,4 @@
 
 /target/
-/TestDataLoader.iml
+*.iml
 /.idea/

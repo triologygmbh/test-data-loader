@@ -65,18 +65,34 @@ public class TestDataLoaderTest {
         assertNotNull(entity);
     }
 
+    @Test
+    public void createsEntityFromClasspath() throws Exception {
+        BasicTestEntity entity = loadDefaultTestDataFromClassPathAndCallGetEntityByName(
+                "basicEntityCp", BasicTestEntity.class);
+        assertNotNull(entity);
+
+        AnotherTestEntity anotherTestEntity = testDataLoader.getEntityByName("entityOfAnotherClassCp",
+                AnotherTestEntity.class);
+        assertNotNull(anotherTestEntity);
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void getEntityByNameFailsForNonexistingEntity() throws Exception {
         loadDefaultTestDataAndCallGetEntityByName("notExisting", BasicTestEntity.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void getEntityByNameFailsIfPassesClassDoesNotMatch() throws Exception {
+    public void getEntityByNameFailsIfPassedClassDoesNotMatch() throws Exception {
         loadDefaultTestDataAndCallGetEntityByName("basicEntity", AnotherTestEntity.class);
     }
 
     private <T> T loadDefaultTestDataAndCallGetEntityByName(String entityName, Class<T> entityClass) {
         testDataLoader.loadTestData(Collections.singletonList("tests/testEntityDefinitions.groovy"));
+        return testDataLoader.getEntityByName(entityName, entityClass);
+    }
+
+    private <T> T loadDefaultTestDataFromClassPathAndCallGetEntityByName(String entityName, Class<T> entityClass) {
+        testDataLoader.loadTestDataFromClasspath(Collections.singletonList("tests/testEntityDefinitionsCp.groovy"));
         return testDataLoader.getEntityByName(entityName, entityClass);
     }
 
