@@ -117,5 +117,13 @@ assert "Bell".equals(tinker.getLastName());
 ### Clean up afterwards
 To reset the database as well as the TestDataLoader to a clean state after a test case simply call `testDataLoader.clear()`. That will delete all created entites from the database and from TestDataLoader's entity cache.
 
+## Tested with...
+
+We have approved TestDataLoader in multiple projects and use cases including
+
+* "unit" tests with H2 and JUnit
+* Integration test with arquillian, WildFly (Swarm) and Postgresql
+* Integration tests with arquillian, IBM WebSphere Liberty Profile und IBM DB2
+
 ## Contributions
 The test-data-loader has been derived and generalized from real world development projects but has yet to prove itself as standalone library. **Any feedback or contributions are highly welcome!**
