@@ -123,7 +123,7 @@ We have approved TestDataLoader in multiple projects and use cases including
 
 * "unit" tests with H2 and JUnit
 * Integration test with arquillian, WildFly (Swarm) and Postgresql
-* Integration tests with arquillian, IBM WebSphere Liberty Profile und IBM DB2
+* Integration tests with arquillian, IBM WebSphere Liberty Profile and IBM DB2
 
 ## Contributions
 The test-data-loader has been derived and generalized from real world development projects but has yet to prove itself as standalone library. **Any feedback or contributions are highly welcome!**
