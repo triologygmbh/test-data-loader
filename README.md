@@ -1,6 +1,6 @@
 # test-data-loader 
  [![Build Status](https://travis-ci.org/triologygmbh/test-data-loader.svg?branch=master)](https://travis-ci.org//triologygmbh/test-data-loader)
-+[![JitPack](https://jitpack.io/v//triologygmbh/test-data-loader.svg)](https://jitpack.io/#/triologygmbh/test-data-loader)
+[![JitPack](https://jitpack.io/v//triologygmbh/test-data-loader.svg)](https://jitpack.io/#/triologygmbh/test-data-loader)
 
 ## Overview
 This project implements a Groovy DSL that can be used to populate a database using JPA entities. Its indented use is testing but it could be used in other scenarios as well.
