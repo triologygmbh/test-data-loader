@@ -29,9 +29,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>triology-blog</groupId>
+    <groupId>com.github.triologygmbh</groupId>
     <artifactId>test-data-loader</artifactId>
-    <version>v0.1.1</version>
+    <version>v0.2</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git@github.com:triologygmbh/test-data-loader.git</connection>
+        <developerConnection>scm:git:git@github.com:triologygmbh/test-data-loader.git</developerConnection>
+        <url>https://github.com/triologygmbh/test-data-loader</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <dependency>
