@@ -23,14 +23,17 @@
  */
 package de.triology.blog.testdataloader
 
-import java.nio.file.Paths
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Creates a Reader for a file from a given String.
  */
 class FileReader {
 
-    private String fileName;
+    private static final Logger LOG = LoggerFactory.getLogger(FileReader.class)
+
+    private String fileName
 
     private FileReader() {}
 
@@ -43,37 +46,39 @@ class FileReader {
      * @throws FileNotFoundException if the file cannot be found
      */
     static Reader create(String fileName) throws FileNotFoundException {
+        LOG.trace("create reader for file name {}", fileName)
         return new FileReader(fileName: fileName).createReaderForFile()
     }
 
     private InputStreamReader createReaderForFile() {
-        URI entityDefinitionFileUri = getUriForEntityDefinition()
-        return createUtf8Reader(entityDefinitionFileUri)
+        InputStream entityDefinitionInputStream = getInputStreamForEntityDefinition()
+        return createUtf8Reader(entityDefinitionInputStream)
     }
 
-    private URI getUriForEntityDefinition() {
-        def uri = getUriFromClasspath() ?: getUriFromFileSystem()
-        if(uri != null) {
-            return uri
+    private InputStream getInputStreamForEntityDefinition() {
+        def inputStream = getInputStreamFromClasspath() ?: getInputStreamFromFileSystem()
+        if (inputStream != null) {
+            return inputStream
         }
         throw new FileNotFoundException("cannot find file '$fileName' in classpath or file system")
     }
 
-    private URI getUriFromClasspath() {
-        URL entityDefinitionFileUrl = getClass().getClassLoader().getResource(fileName)
-        if (entityDefinitionFileUrl != null) {
-            return entityDefinitionFileUrl.toURI()
+    private InputStream getInputStreamFromClasspath() {
+        LOG.trace("Trying to load resource from classpath {}", fileName)
+        InputStream entityDefinitionInputStream = getClass().getClassLoader().getResourceAsStream(fileName)
+        if (entityDefinitionInputStream != null) {
+            return entityDefinitionInputStream
         }
         return null
     }
 
-    private URI getUriFromFileSystem() {
-        return Paths.get(fileName).toUri()
+    private InputStream getInputStreamFromFileSystem() {
+        LOG.trace("Trying to load resource from filesystem {}", fileName)
+        return new FileInputStream(fileName)
     }
 
-    private static InputStreamReader createUtf8Reader(URI entityDefinitionFileUri) {
-        InputStream inputStream = new FileInputStream(new File(entityDefinitionFileUri))
-        return new InputStreamReader(inputStream, "UTF-8");
+    private static InputStreamReader createUtf8Reader(InputStream entityDefinitionInputStream) {
+        return new InputStreamReader(entityDefinitionInputStream, "UTF-8")
     }
 
 }
