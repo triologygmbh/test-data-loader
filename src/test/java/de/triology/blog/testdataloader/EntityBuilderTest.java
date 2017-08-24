@@ -25,6 +25,7 @@ package de.triology.blog.testdataloader;
 
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
+import de.triology.blog.testdataloader.testentities.InheritingEntity;
 import de.triology.blog.testdataloader.testentities.TestEntityWithToManyRelationship;
 import de.triology.blog.testdataloader.testentities.TestEntityWithToOneRelationship;
 import org.apache.commons.lang3.time.DateUtils;
@@ -77,6 +78,13 @@ public class EntityBuilderTest {
     public void createsEntityFromDsl() throws Exception {
         assertEntityOfClassWasBuilt("basicEntity", BasicTestEntity.class);
     }
+
+    @Test
+    public void createsEntityThatUsesFieldFromMappedSuperclass()  throws Exception {
+        callBuildEntitiesWithFile("tests/mappedSuperclass.groovy");
+        assertEntityOfClassWasBuilt("inherited", InheritingEntity.class);
+    }
+
 
     @Test
     public void createsMultipleEntitiesFromDsl() throws Exception {
