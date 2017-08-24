@@ -103,6 +103,11 @@ import de.triology.blog.testdataloader.demo.User
 }
 ```
 
+**Private fields from superclasses**
+
+For now, we must work around this, by setting the field to `protected` or creating a `protected` setter method.
+See [this issue](https://github.com/triologygmbh/test-data-loader/issues/7).
+
 ### Loading entity definitions
 Use the `de.triology.blog.testdataloader.TestDataLoader` to load entitiy definition files (from classpath or file system) and persist the defined entities. 
 The `TestDataLoader` requires a fully initialized, ready-to-use entitiy manager and can then be used to load entity definition files and access the persisted entities.
