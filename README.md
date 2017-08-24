@@ -6,6 +6,10 @@
 This project implements a Groovy DSL that can be used to populate a database using JPA entities. Its indented use is testing but it could be used in other scenarios as well.
 The DSL is implemented in Groovy but can be used from pure Java. Entities are modularly defined in separate .groovy files using the DSL syntax. Those entitiy definition files can then be loaded as needed using the `de.triology.blog.testdataloader.TestDataLoader`, which also provides access to loaded entities. Thus, the client code does not need to deal with any database or JPA specific concerns other than providing an initialized EntityManager.
 
+This project was started while working on an article published in [Java aktuell](http://www.ijug.eu/java-aktuell/das-magazin.html) 03/2017: 
+[A Groovy DSL for the Creation of Test Data using JPA](https://www.triology.de/en/blog-entries/groovy-dsl-test-data).  
+The original article (🇩🇪) can be found here: [Eine Groovy-DSL zum Erzeugen von Testdaten über JPA](https://www.triology.de/blog/groovy-dsl-testdaten). 
+
 ## Configuration
 You can use JitPack to configure the test-data-loader as a dependency in your project.<br/>
 For example when using maven, define the JitPack repository:
@@ -123,7 +127,7 @@ We have approved TestDataLoader in multiple projects and use cases including
 
 * "unit" tests with H2 and JUnit
 * Integration test with arquillian, WildFly (Swarm) and Postgresql
-* Integration tests with arquillian, IBM WebSphere Liberty Profile und IBM DB2
+* Integration tests with arquillian, IBM WebSphere Liberty Profile and IBM DB2
 
 ## Contributions
 The test-data-loader has been derived and generalized from real world development projects but has yet to prove itself as standalone library. **Any feedback or contributions are highly welcome!**
