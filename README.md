@@ -8,7 +8,7 @@ The DSL is implemented in Groovy but can be used from pure Java. Entities are mo
 
 This project was started while working on an article published in [Java aktuell](http://www.ijug.eu/java-aktuell/das-magazin.html) 03/2017: 
 [A Groovy DSL for the Creation of Test Data using JPA](https://www.triology.de/en/blog-entries/groovy-dsl-test-data).  
-The original article (🇩🇪) can be found here: [Eine Groovy-DSL zum Erzeugen von Testdaten über JPA](https://www.triology.de/blog/groovy-dsl-testdaten). 
+The original article (🇩🇪) can be found here: [Eine Groovy-DSL zum Erzeugen von Testdaten über JPA](https://www.triology.de/wp-content/uploads/2017/09/Eine-Groovy-DSL-zum-Erzeugen-von-Testdaten-ueber-JPA.pdf). 
 
 ## Configuration
 You can use JitPack to configure the test-data-loader as a dependency in your project.<br/>
