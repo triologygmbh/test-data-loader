@@ -44,14 +44,5 @@ node {
     // Find maven warnings and visualize in job
     warnings consoleParsers: [[parserName: 'Maven']]
 
-    mailIfStatusChanged(emailRecipients)
-}
-
-String getEmailRecipients() {
-    def isStableBranch = env.EMAIL_RECIPIENTS_ACCOUNT in ['master', 'develop']
-    if (isStableBranch) {
-        return env.EMAIL_RECIPIENTS_TDL
-    } else {
-        return git.commitAuthorEmail
-    }
+    mailIfStatusChanged(git.commitAuthorEmail)
 }
