@@ -1,5 +1,5 @@
 # test-data-loader 
- [![Build Status](https://travis-ci.org/triologygmbh/test-data-loader.svg?branch=master)](https://travis-ci.org//triologygmbh/test-data-loader)
+[![Build Status](https://opensource.triology.de/jenkins/buildStatus/icon?job=triologygmbh-github/test-data-loader/master)](https://opensource.triology.de/jenkins/job/triologygmbh-github/job/test-data-loader/job/master/)
 [![JitPack](https://jitpack.io/v//triologygmbh/test-data-loader.svg)](https://jitpack.io/#/triologygmbh/test-data-loader)
 
 ## Overview
