@@ -33,6 +33,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.sources>src/main/groovy</sonar.sources>
+        <sonar.test.source>src/test/groovy</sonar.test.source>
+        <sonar.groovy.jacoco.reportPath>target/jacoco.exec</sonar.groovy.jacoco.reportPath>
     </properties>
 
     <scm>
@@ -221,8 +224,39 @@
                     <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/release</altDeploymentRepository>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <!-- profile is active on every jenkins build -->
+            <id>jenkins</id>
+
+            <activation>
+                <property>
+                    <name>env.BUILD_URL</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+
+                    <!-- prepare jacoco agent for code coverage in sonar -->
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
