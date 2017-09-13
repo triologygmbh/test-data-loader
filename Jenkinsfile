@@ -11,13 +11,13 @@ node {
             disableConcurrentBuilds()
     ])
 
+    def mvnHome = tool 'M3'
+    def javaHome = tool 'JDK8'
+
+    Maven mvn = new MavenLocal(this, mvnHome, javaHome)
+    Git git = new Git(this)
+
     catchError {
-
-        def mvnHome = tool 'M3'
-        def javaHome = tool 'JDK8'
-
-        Maven mvn = new MavenLocal(this, mvnHome, javaHome)
-        Git git = new Git(this)
 
         stage('Checkout') {
             checkout scm
