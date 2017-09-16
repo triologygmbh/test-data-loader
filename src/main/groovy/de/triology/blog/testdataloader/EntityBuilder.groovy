@@ -23,7 +23,6 @@
  */
 package de.triology.blog.testdataloader
 
-import groovy.transform.PackageScope
 import org.codehaus.groovy.control.CompilerConfiguration
 
 /**
@@ -31,158 +30,47 @@ import org.codehaus.groovy.control.CompilerConfiguration
  */
 class EntityBuilder {
 
-    private static EntityBuilder singletonInstance;
-
-    private Map<String, ?> entitiesByName = [:]
     private List<EntityCreatedListener> entityCreatedListeners = []
 
     private EntityBuilder() {}
 
-    /**
-     * Gets the EntityBuilder singleton instance
-     * @return EntityBuilder
-     */
-    protected static EntityBuilder instance() {
-        singletonInstance = singletonInstance ?: new EntityBuilder();
-        return singletonInstance
+    public static EntityBuilder newBuilder() {
+        return new EntityBuilder()
     }
+
+
 
     /**
      * Builds the entities defined in the provided by the passed Reader.
      *
      * @param entityDefinitionReader Reader - a Reader for the file containing the entity definitions
      */
-    protected void buildEntities(Reader entityDefinitionReader) {
-        DelegatingScript script = createExecutableScriptFromEntityDefinition(entityDefinitionReader)
-        script.setDelegate(this)
-        script.run()
-    }
-
-    private DelegatingScript createExecutableScriptFromEntityDefinition(Reader entityDefinitionReader) {
-        GroovyShell shell = createGroovyShell()
-        return (DelegatingScript) shell.parse(entityDefinitionReader)
-    }
-
-    private GroovyShell createGroovyShell() {
+    public EntityStore build(Reader entityDefinitionReader) {
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration()
-        compilerConfiguration.scriptBaseClass = DelegatingScript.class.name
-        return new GroovyShell(this.class.classLoader, compilerConfiguration)
-    }
+        compilerConfiguration.scriptBaseClass = EntityBuilderScript.class.name
 
-    /**
-     * Creates an Instance of the specified  entityClass, registers it under the specified entityName and applies the
-     * specified entityData definition
-     *
-     * @param entityClass
-     * @param entityName
-     * @param entityData
-     * @return the created entity
-     */
-    static <T> T create(@DelegatesTo.Target Class<T> entityClass, String entityName,
-                        @DelegatesTo(strategy = Closure.DELEGATE_FIRST, genericTypeIndex = 0) Closure entityData = {}) {
-        return instance().createEntity(entityClass, entityName, entityData);
-    }
+        EntityBuilderDsl dsl = new EntityBuilderDsl(this)
+        Binding binding = new Binding()
+        binding.dsl = dsl
 
-    private <T> T createEntity(Class<T> entityClass, String entityName, Closure entityData) {
-        T entity = createEntityInstance(entityName, entityClass)
-        executeEntityDataDefinition(entityData, entity)
-        notifyEntityCreatedListeners(entity)
-        return entity
-    }
+        GroovyShell shell = new GroovyShell(this.class.classLoader, binding, compilerConfiguration)
+        Script script =  shell.parse(entityDefinitionReader)
+        script.run()
 
-    private <T> T createEntityInstance(String entityName, Class<T> entityClass) {
-        ensureNameHasNotYetBeenAssigned(entityName, entityClass)
-        T entity = entityClass.newInstance()
-        entitiesByName[entityName] = entity;
-        return entity
-    }
-
-    private void ensureNameHasNotYetBeenAssigned(String entityName, Class requestedEntityClass) {
-        if (entitiesByName[entityName]) {
-            throw new EntityBuildingException(
-                    "attempt to create an instance of $requestedEntityClass under the name of '$entityName' but an " +
-                            "entity with that name already exists: ${entitiesByName[entityName]}")
-        }
-    }
-
-    private void notifyEntityCreatedListeners(Object entity) {
-        entityCreatedListeners.each {
-            it.entityCreated(entity)
-        }
-    }
-
-    private void executeEntityDataDefinition(Closure entityDataDefinition, Object entity) {
-        entityDataDefinition = entityDataDefinition.rehydrate(entity, this, this)
-        entityDataDefinition.call()
-    }
-
-    /**
-     * Implementation of Groovy's {@code propertyMissing} that returns the entity previously created under the property
-     * name. This Method will be called during entity creation, when an entity is referenced.
-     *
-     * @param name String
-     * @return a previously created entity
-     */
-    private def propertyMissing(String name) {
-        if (entitiesByName[name]) {
-            return entitiesByName[name]
-        }
-        throw new EntityBuildingException("requested reference for entity with name '$name' cannot be resolved")
+        return dsl
     }
 
     /**
      * Adds an {@link EntityCreatedListener} that gets notified every time an entity is completely created.
      * @param listener {@link EntityCreatedListener}
      */
-    protected void addEntityCreatedListener(EntityCreatedListener listener) {
+    public EntityBuilder addEntityCreatedListener(EntityCreatedListener listener) {
         entityCreatedListeners += listener
+        return this
     }
 
-    /**
-     * Removes the {@link EntityCreatedListener}
-     * @param listener {@link EntityCreatedListener}
-     */
-    protected void removeEntityCreatedListener(EntityCreatedListener listener) {
-        entityCreatedListeners -= listener
-    }
-
-    /**
-     * Gets the entity with the specified name from the set of entities created.
-     *
-     * If this {@code EntityBuilder} has not created an entity by the passed name a {@link NoSuchElementException} is
-     * thrown. If an entity is found but has a different type than the passed {@code entityClass}, an
-     * {@link IllegalArgumentException} is thrown.
-     *
-     * @param name {@link String} - the requested entity's name
-     * @param entityClass the requested entity's {@link Class}
-     * @return the requested entity
-     */
-    protected <T> T getEntityByName(String name, Class<T> entityClass) {
-        def entity = findEntity(name)
-        ensureTypesMatch(entityClass, entity, name)
-        return (T) entity;
-    }
-
-    private Object findEntity(String name) {
-        def entity = entitiesByName[name]
-        if (!entity) {
-            throw new NoSuchElementException("an entity named '$name' has not been created by the EntityBuilder")
-        }
-        return entity
-    }
-
-    private void ensureTypesMatch(Class entityClass, entity, String name) {
-        if (entityClass != entity.class) {
-            throw new IllegalArgumentException(
-                    "The class of the requested entity named '$name' does not match the requested class. Requested: $entityClass, Actual: ${entity.class}")
-        }
-    }
-
-    /**
-     * Clears all previously built entities.
-     */
-    protected void clear() {
-        entitiesByName.clear()
+    protected void fireEntityCreated(String entityName, Object entity) {
+        entityCreatedListeners.each { it.onEntityCreated(entityName, entity) }
     }
 }
 

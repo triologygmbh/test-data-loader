@@ -23,11 +23,12 @@
  */
 package de.triology.blog.testdataloader
 
-import groovy.transform.PackageScope
+import javax.persistence.EntityManager
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import javax.persistence.EntityManager
+import groovy.transform.PackageScope
 
 /**
  * If added as {@link EntityCreatedListener} during entity creation, the EntityDeleter keeps track of created entities
@@ -51,12 +52,8 @@ class EntityDeleter implements EntityCreatedListener {
         entities = new Stack()
     }
 
-    /**
-     * Keeps track of all created entities to be able to delete them later.
-     *
-     * @param entity a created entity
-     */
-    public void entityCreated(Object entity) {
+    @Override
+    public void onEntityCreated(String name, Object entity) {
         entities.push(entity)
     }
 

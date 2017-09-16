@@ -21,8 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.blog.testdataloader.testentities.AnotherTestEntity
-import de.triology.blog.testdataloader.testentities.BasicTestEntity
 
-create BasicTestEntity, 'nameThatIsUsedTwoTimes', {}
-create AnotherTestEntity, 'nameThatIsUsedTwoTimes', {}
+package de.triology.blog.testdataloader;
+
+import java.util.NoSuchElementException;
+
+/**
+ * An entity store which maintains the set of loaded entities.
+ *
+ */
+interface EntityStore {
+
+    /**
+     * Gets the entity with the specified name from the set of entities created.
+     *
+     * If this {@code EntityBuilder} has not created an entity by the passed name a
+     * {@link NoSuchElementException} is thrown. If an entity is found but has a different type than
+     * the passed {@code entityClass}, an {@link IllegalArgumentException} is thrown.
+     *
+     * @param name
+     *            {@link String} - the requested entity's name
+     * @param entityClass
+     *            the requested entity's {@link Class}
+     * @return the requested entity
+     */
+    <T> T getEntityByName(String name, Class<T> entityClass);
+
+    /**
+     * Removes all entities from the store, so that they are no longer available through the
+     * {@code getEntityByName} method.
+     */
+    void clear();
+}

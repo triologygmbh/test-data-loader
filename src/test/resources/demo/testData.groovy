@@ -23,7 +23,6 @@
  */
 import de.triology.blog.testdataloader.demo.Department
 
-import static de.triology.blog.testdataloader.EntityBuilder.create
 import de.triology.blog.testdataloader.demo.User
 
 create User, 'Peter', {

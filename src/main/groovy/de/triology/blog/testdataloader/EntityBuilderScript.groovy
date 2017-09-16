@@ -21,8 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.blog.testdataloader.testentities.AnotherTestEntity
-import de.triology.blog.testdataloader.testentities.BasicTestEntity
 
-create BasicTestEntity, 'nameThatIsUsedTwoTimes', {}
-create AnotherTestEntity, 'nameThatIsUsedTwoTimes', {}
+package de.triology.blog.testdataloader
+
+abstract class EntityBuilderScript extends Script {
+
+    @Delegate
+    @Lazy
+    EntityBuilderDsl dsl = this.binding.dsl
+}

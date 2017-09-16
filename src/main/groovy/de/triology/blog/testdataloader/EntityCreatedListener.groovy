@@ -30,8 +30,9 @@ interface EntityCreatedListener {
 
     /**
      * Is called every time an entity is completely created, including all referenced entities.
+     *
+     * @param name the name of the entity created
      * @param entity the created entity
      */
-    void entityCreated(Object entity)
-
+    void onEntityCreated(String name, Object entity)
 }

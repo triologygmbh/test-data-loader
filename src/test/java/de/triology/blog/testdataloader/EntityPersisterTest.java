@@ -23,21 +23,21 @@
  */
 package de.triology.blog.testdataloader;
 
-import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import javax.persistence.EntityManager;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import org.junit.Test;
 
 public class EntityPersisterTest {
 
     @Test
     public void persistsCreatedEntities() throws Exception {
-        EntityManager entityManagerMock = mock(EntityManager.class);
-        EntityPersister entityPersister = new EntityPersister(entityManagerMock);
-        Object entity = new Object();
-        entityPersister.entityCreated(entity);
+        final EntityManager entityManagerMock = mock(EntityManager.class);
+        final EntityPersister entityPersister = new EntityPersister(entityManagerMock);
+        final Object entity = new Object();
+        entityPersister.onEntityCreated("entity", entity);
         verify(entityManagerMock).persist(entity);
     }
 }

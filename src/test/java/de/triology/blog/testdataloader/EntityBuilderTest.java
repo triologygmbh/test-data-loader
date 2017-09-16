@@ -23,55 +23,60 @@
  */
 package de.triology.blog.testdataloader;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.apache.commons.lang3.time.DateUtils;
+import org.junit.Before;
+import org.junit.Test;
+
 import de.triology.blog.testdataloader.testentities.AnotherTestEntity;
 import de.triology.blog.testdataloader.testentities.BasicTestEntity;
 import de.triology.blog.testdataloader.testentities.InheritingEntity;
 import de.triology.blog.testdataloader.testentities.TestEntityWithToManyRelationship;
 import de.triology.blog.testdataloader.testentities.TestEntityWithToOneRelationship;
-import org.apache.commons.lang3.time.DateUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.FileNotFoundException;
-import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class EntityBuilderTest {
 
     private EntityBuilder builder;
+    private EntityStore entityStore;
 
     @Before
     public void setUp() throws Exception {
-        builder = EntityBuilder.instance();
-        builder.clear();
+        builder = EntityBuilder.newBuilder();
         callBuildEntitiesWithFile("tests/testEntityDefinitions.groovy");
     }
 
-    private void callBuildEntitiesWithFile(String file) throws FileNotFoundException {
-        builder.buildEntities(FileReader.create(file));
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        builder.clear();
+    private void callBuildEntitiesWithFile(final String file) throws FileNotFoundException {
+        entityStore = builder.build(FileReader.create(file));
     }
 
     @Test
     public void getsCreatedEntityByName() throws Exception {
-        BasicTestEntity entity = builder.getEntityByName("basicEntity", BasicTestEntity.class);
+        final BasicTestEntity entity = entityStore.getEntityByName("basicEntity", BasicTestEntity.class);
         assertNotNull(entity);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void getEntityByNameFailsForNonexistingEntity() throws Exception {
-        builder.getEntityByName("notExisting", BasicTestEntity.class);
+        entityStore.getEntityByName("notExisting", BasicTestEntity.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getEntityByNameFailsIfPassesClassDoesNotMatch() throws Exception {
-        builder.getEntityByName("basicEntity", AnotherTestEntity.class);
+        entityStore.getEntityByName("basicEntity", AnotherTestEntity.class);
     }
 
     @Test
@@ -80,11 +85,10 @@ public class EntityBuilderTest {
     }
 
     @Test
-    public void createsEntityThatUsesFieldFromMappedSuperclass()  throws Exception {
+    public void createsEntityThatUsesFieldFromMappedSuperclass() throws Exception {
         callBuildEntitiesWithFile("tests/mappedSuperclass.groovy");
         assertEntityOfClassWasBuilt("inherited", InheritingEntity.class);
     }
-
 
     @Test
     public void createsMultipleEntitiesFromDsl() throws Exception {
@@ -92,28 +96,28 @@ public class EntityBuilderTest {
         assertEntityOfClassWasBuilt("entityOfAnotherClass", AnotherTestEntity.class);
     }
 
-    private <T> void assertEntityOfClassWasBuilt(String entityName, Class<T> clazz) {
-        T entity = builder.getEntityByName(entityName, clazz);
+    private <T> void assertEntityOfClassWasBuilt(final String entityName, final Class<T> clazz) {
+        final T entity = entityStore.getEntityByName(entityName, clazz);
         assertNotNull("entity of name " + entityName + " was not built", entity);
         assertEquals(clazz, entity.getClass());
     }
 
     @Test
     public void setsStringProperty() throws Exception {
-        BasicTestEntity entity = builder.getEntityByName("basicEntity", BasicTestEntity.class);
+        final BasicTestEntity entity = entityStore.getEntityByName("basicEntity", BasicTestEntity.class);
         assertEquals("a string value", entity.getStringProperty());
     }
 
     @Test
     public void setsIntegerProperty() throws Exception {
-        BasicTestEntity entity = builder.getEntityByName("basicEntity", BasicTestEntity.class);
+        final BasicTestEntity entity = entityStore.getEntityByName("basicEntity", BasicTestEntity.class);
         assertEquals(5, (int) entity.getIntegerProperty());
     }
 
     @Test
     public void setProgrammaticallyCreatedDateProperty() throws Exception {
-        BasicTestEntity entity = builder.getEntityByName("basicEntity", BasicTestEntity.class);
-        Calendar calendar = Calendar.getInstance();
+        final BasicTestEntity entity = entityStore.getEntityByName("basicEntity", BasicTestEntity.class);
+        final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 18);
         calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
         calendar.set(Calendar.YEAR, 2015);
@@ -122,47 +126,46 @@ public class EntityBuilderTest {
 
     @Test
     public void buildsReferencedEntityInPlace() throws Exception {
-        TestEntityWithToOneRelationship entity = builder.getEntityByName("entityWithToOneRelationship",
+        final TestEntityWithToOneRelationship entity = entityStore.getEntityByName("entityWithToOneRelationship",
                 TestEntityWithToOneRelationship.class);
         assertEntityOfClassWasBuilt("referencedInstance", BasicTestEntity.class);
-        BasicTestEntity referencedEntity = builder.getEntityByName("referencedInstance", BasicTestEntity.class);
+        final BasicTestEntity referencedEntity = entityStore.getEntityByName("referencedInstance", BasicTestEntity.class);
         assertSame(referencedEntity, entity.getReferencedEntity());
     }
 
     @Test
     public void setsPropertiesOfEntitiesBuiltInPlace() throws Exception {
-        TestEntityWithToOneRelationship entity = builder.getEntityByName("entityWithToOneRelationship",
+        final TestEntityWithToOneRelationship entity = entityStore.getEntityByName("entityWithToOneRelationship",
                 TestEntityWithToOneRelationship.class);
-        BasicTestEntity referencedEntity = entity.getReferencedEntity();
+        final BasicTestEntity referencedEntity = entity.getReferencedEntity();
         assertEquals("string in referenced entity", referencedEntity.getStringProperty());
         assertEquals(222, (int) referencedEntity.getIntegerProperty());
     }
 
     @Test
     public void buildEntitiesWithArbitraryNesting() throws Exception {
-        TestEntityWithToOneRelationship entity = builder.getEntityByName("deeplyNestedEntities",
+        final TestEntityWithToOneRelationship entity = entityStore.getEntityByName("deeplyNestedEntities",
                 TestEntityWithToOneRelationship.class);
-        assertSame(builder.getEntityByName("nest1", TestEntityWithToOneRelationship.class),
+        assertSame(entityStore.getEntityByName("nest1", TestEntityWithToOneRelationship.class),
                 entity.getTestEntityWithToOneRelationship());
-        assertSame(builder.getEntityByName("nest2", TestEntityWithToOneRelationship.class),
+        assertSame(entityStore.getEntityByName("nest2", TestEntityWithToOneRelationship.class),
                 entity.getTestEntityWithToOneRelationship().getTestEntityWithToOneRelationship());
-        assertSame(builder.getEntityByName("nest3", BasicTestEntity.class),
+        assertSame(entityStore.getEntityByName("nest3", BasicTestEntity.class),
                 entity.getTestEntityWithToOneRelationship().getTestEntityWithToOneRelationship().getReferencedEntity());
-        assertEquals("deeply nested string", builder.getEntityByName("nest3", BasicTestEntity.class).getStringProperty());
+        assertEquals("deeply nested string", entityStore.getEntityByName("nest3", BasicTestEntity.class).getStringProperty());
     }
 
     @Test
     public void resolvesReferences() throws Exception {
-        TestEntityWithToOneRelationship entity = builder.getEntityByName("entityReferencingPreviouslyCreatedEntity",
+        final TestEntityWithToOneRelationship entity = entityStore.getEntityByName("entityReferencingPreviouslyCreatedEntity",
                 TestEntityWithToOneRelationship.class);
-        assertSame(builder.getEntityByName("secondBasicEntity", BasicTestEntity.class), entity.getReferencedEntity());
+        assertSame(entityStore.getEntityByName("secondBasicEntity", BasicTestEntity.class), entity.getReferencedEntity());
     }
 
     @Test(expected = EntityBuildingException.class)
     public void failsIfReferencedEntityDoesNotExist() throws Exception {
         callBuildEntitiesWithFile("tests/failingBecauseOfMissingReferencedEntity.groovy");
     }
-
 
     @Test(expected = EntityBuildingException.class)
     public void failsIfAnEntityNameHasAlreadyBeenUsed() throws Exception {
@@ -171,13 +174,13 @@ public class EntityBuilderTest {
 
     @Test
     public void setsCollectionOfReferencedEntities() throws Exception {
-        TestEntityWithToManyRelationship entity = builder.getEntityByName("entityWithCollection",
+        final TestEntityWithToManyRelationship entity = entityStore.getEntityByName("entityWithCollection",
                 TestEntityWithToManyRelationship.class);
-        Collection<BasicTestEntity> toManyRelationship = entity.getToManyRelationship();
+        final Collection<BasicTestEntity> toManyRelationship = entity.getToManyRelationship();
         assertEquals(2, toManyRelationship.size());
         BasicTestEntity referencedEntity1 = null;
         BasicTestEntity referencedEntity2 = null;
-        for (BasicTestEntity basicTestEntity : toManyRelationship) {
+        for (final BasicTestEntity basicTestEntity : toManyRelationship) {
             if (referencedEntity1 == null) {
                 referencedEntity1 = basicTestEntity;
             } else {
@@ -193,10 +196,9 @@ public class EntityBuilderTest {
 
     @Test
     public void notifiesEntityCreatedListenerInTheOrderOfEntityCreation() throws Exception {
-        builder.clear();
         final List<Object> entitiesInOrderOfCreation = new ArrayList<Object>();
         builder.addEntityCreatedListener(new EntityCreatedListener() {
-            public void entityCreated(Object entity) {
+            public void onEntityCreated(final String name, final Object entity) {
                 entitiesInOrderOfCreation.add(entity);
             }
         });
@@ -208,16 +210,32 @@ public class EntityBuilderTest {
         assertEquals(TestEntityWithToOneRelationship.class, entitiesInOrderOfCreation.get(3).getClass());
     }
 
-    @Test (expected = NoSuchElementException.class)
+    @Test(expected = NoSuchElementException.class)
     public void clearsEntities() throws Exception {
         try {
-            builder.getEntityByName("basicEntity", BasicTestEntity.class);
-        } catch (NoSuchElementException e) {
+            entityStore.getEntityByName("basicEntity", BasicTestEntity.class);
+        } catch (final NoSuchElementException e) {
             e.printStackTrace();
             fail("basicEntity already was not available before calling clearEntityCacheAndDatabase");
         }
 
-        builder.clear();
-        builder.getEntityByName("basicEntity", BasicTestEntity.class);
+        entityStore.clear();
+        entityStore.getEntityByName("basicEntity", BasicTestEntity.class);
+    }
+
+    @Test
+    public void builderCreatesNewStoreForEachBuildAttempt() throws FileNotFoundException {
+        final EntityStore oldStore = EntityBuilder.newBuilder().build(FileReader.create("tests/testEntityDefinitions.groovy"));
+        final EntityStore newStore = EntityBuilder.newBuilder().build(FileReader.create("tests/testEntityDefinitions.groovy"));
+
+        assertNotEquals(oldStore, newStore);
+
+        final BasicTestEntity oldEntity = oldStore.getEntityByName("basicEntity", BasicTestEntity.class);
+        assertNotNull(oldEntity);
+
+        final BasicTestEntity newEntity = newStore.getEntityByName("basicEntity", BasicTestEntity.class);
+        assertNotNull(newEntity);
+
+        assertNotEquals(oldEntity, newEntity);
     }
 }

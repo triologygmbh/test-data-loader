@@ -26,8 +26,6 @@ import de.triology.blog.testdataloader.testentities.InheritingEntity
  * SOFTWARE.
  */
 
-import static de.triology.blog.testdataloader.EntityBuilder.create
-
 create(InheritingEntity, "inherited") {
     inheritedField = "this Field is privately defined in the superclass"
     nonInheritedField = "this Field is privately defined in the the actual class"
