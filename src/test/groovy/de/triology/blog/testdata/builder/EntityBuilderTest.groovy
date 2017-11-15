@@ -80,7 +80,7 @@ class EntityBuilderTest extends Specification {
         when: "the script is processed"
         builder.build(new StringReader(entityDefinition))
 
-        then: "the registered listener gets notified for each created object"
+        then: "the registered listener get notified for each created object"
         1 * listener.onEntityCreated("simple", {
             it.prop == "SimpleValue"
             capturedSimple = it
