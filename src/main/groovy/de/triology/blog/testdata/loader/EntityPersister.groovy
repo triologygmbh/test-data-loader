@@ -26,10 +26,12 @@ package de.triology.blog.testdata.loader
 import javax.persistence.EntityManager
 
 import de.triology.blog.testdata.builder.EntityBuilderListener
+import groovy.transform.PackageScope
 
 /**
  * An EntityCreatedListener that persists created entities.
  */
+@PackageScope
 class EntityPersister implements EntityBuilderListener {
 
     private EntityManager entityManager
