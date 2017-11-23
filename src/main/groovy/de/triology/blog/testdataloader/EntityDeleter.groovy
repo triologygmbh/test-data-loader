@@ -34,7 +34,7 @@ import javax.persistence.EntityManager
  * for later deletion.
  */
 @PackageScope
-class EntityDeleter implements EntityCreatedListener {
+class EntityDeleter implements EntityBuilderListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityDeleter)
 

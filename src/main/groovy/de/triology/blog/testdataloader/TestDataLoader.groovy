@@ -32,7 +32,7 @@ import javax.persistence.EntityManager
  * Loads test data from entity definition files, saves them to a database via a specified {@link EntityManager} and
  * makes the entities available by their names as defined in the entity definition files.
  */
-class TestDataLoader implements EntityCreatedListener {
+class TestDataLoader implements EntityBuilderListener {
 
     /**
      * Defines the transaction type that the {@link EntityManager} passed to the {@code TestDataLoader} is configured with.
@@ -116,9 +116,9 @@ class TestDataLoader implements EntityCreatedListener {
     void loadTestData(Collection<String> entityDefinitionFiles) {
         EntityPersister persister = new EntityPersister(entityManager)
         EntityBuilder entityBuilder = new EntityBuilder()
-                .addEntityCreatedListener(this)
-                .addEntityCreatedListener(persister)
-                .addEntityCreatedListener(entityDeleter)
+                .addEntityBuilderListener(this)
+                .addEntityBuilderListener(persister)
+                .addEntityBuilderListener(entityDeleter)
 
         withTransaction {
             entityDefinitionFiles.each {

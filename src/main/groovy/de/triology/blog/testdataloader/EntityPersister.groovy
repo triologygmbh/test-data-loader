@@ -28,7 +28,7 @@ import javax.persistence.EntityManager
 /**
  * An EntityCreatedListener that persists created entities.
  */
-class EntityPersister implements EntityCreatedListener {
+class EntityPersister implements EntityBuilderListener {
 
     private EntityManager entityManager
 

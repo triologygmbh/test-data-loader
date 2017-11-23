@@ -30,7 +30,7 @@ import org.codehaus.groovy.control.CompilerConfiguration
  */
 class EntityBuilder {
 
-    private List<EntityCreatedListener> listeners = []
+    private List<EntityBuilderListener> listeners = []
 
     /**
      * Builds the entities defined in the provided by the passed Reader.
@@ -50,10 +50,10 @@ class EntityBuilder {
     }
 
     /**
-     * Adds an {@link EntityCreatedListener} that gets notified every time an entity is completely created.
-     * @param listener {@link EntityCreatedListener}
+     * Adds an {@link EntityBuilderListener} that gets notified every time an entity is completely created.
+     * @param listener {@link EntityBuilderListener}
      */
-    public EntityBuilder addEntityCreatedListener(EntityCreatedListener listener) {
+    public EntityBuilder addEntityBuilderListener(EntityBuilderListener listener) {
         listeners += listener
         return this
     }

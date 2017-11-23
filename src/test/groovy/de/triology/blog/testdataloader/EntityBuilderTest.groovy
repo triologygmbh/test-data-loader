@@ -44,12 +44,11 @@ class EntityBuilderTest extends Specification {
         String builtObject = "obj"
         String objName = "ObjectName"
 
-        EntityCreatedListener listener1 = Mock()
-        EntityCreatedListener listener2 = Mock()
+        EntityBuilderListener listener1 = Mock()
+        EntityBuilderListener listener2 = Mock()
 
-        builder
-                .addEntityCreatedListener(listener1)
-                .addEntityCreatedListener(listener2)
+        builder.addEntityBuilderListener(listener1)
+               .addEntityBuilderListener(listener2)
 
         when: "the builder's method fireEntityCreated is called"
         builder.fireEntityCreated(objName, builtObject)
@@ -74,8 +73,8 @@ class EntityBuilderTest extends Specification {
         """
 
         and: "an entity builder instance with registered listeners"
-        EntityCreatedListener listener = Mock()
-        builder.addEntityCreatedListener(listener)
+        EntityBuilderListener listener = Mock()
+        builder.addEntityBuilderListener(listener)
 
         when: "the script is processed"
         builder.build(new StringReader(entityDefinition))

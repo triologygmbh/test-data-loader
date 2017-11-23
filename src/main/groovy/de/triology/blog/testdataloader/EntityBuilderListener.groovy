@@ -26,7 +26,7 @@ package de.triology.blog.testdataloader
 /**
  * Listener for entity creation. Gets notified every time an entity is completely created.
  */
-interface EntityCreatedListener {
+interface EntityBuilderListener {
 
     /**
      * Is called every time an entity is completely created, including all referenced entities.
