@@ -1,0 +1,29 @@
+/*
+ *  this is a DSL descriptor which supports the creation of groovy EntityBuilder based scripts
+ *
+ *  @author Dimitrij Drus
+ */
+
+contribute(isScript()) {
+    provider = "Entity Builder DSL"
+
+    method name: "create", params: [entityClass: Class, entityName: String, entityData: Closure],
+    declaringType: 'de.triology.blog.testdata.builder.EntityBuilderDsl'
+}
+
+contribute(isScript() & enclosingCallName("create") & inClosure()) {
+    provider = "Entity Builder DSL"
+
+    Class type = getReferencedType(enclosingNode)
+
+    if(type) {
+        delegatesTo(type)
+        setDelegateType(type.name)
+    }
+}
+
+Class getReferencedType(node) {
+    def expressions = node?.arguments?.expressions
+    return expressions ? expressions[0].type.getTypeClass() : null
+}
+
