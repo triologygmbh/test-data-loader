@@ -196,7 +196,7 @@ public class EntityBuilderTest {
         builder.clear();
         final List<Object> entitiesInOrderOfCreation = new ArrayList<Object>();
         builder.addEntityCreatedListener(new EntityCreatedListener() {
-            public void entityCreated(Object entity) {
+            public void onEntityCreated(String name, Object entity) {
                 entitiesInOrderOfCreation.add(entity);
             }
         });

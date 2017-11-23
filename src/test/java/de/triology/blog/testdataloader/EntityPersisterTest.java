@@ -37,7 +37,7 @@ public class EntityPersisterTest {
         EntityManager entityManagerMock = mock(EntityManager.class);
         EntityPersister entityPersister = new EntityPersister(entityManagerMock);
         Object entity = new Object();
-        entityPersister.entityCreated(entity);
+        entityPersister.onEntityCreated("entity1", entity);
         verify(entityManagerMock).persist(entity);
     }
 }

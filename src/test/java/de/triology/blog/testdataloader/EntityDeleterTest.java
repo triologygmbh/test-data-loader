@@ -59,9 +59,9 @@ public class EntityDeleterTest {
         Object entity2 = new Object();
         Object entity3 = new Object();
 
-        entityDeleter.entityCreated(entity1);
-        entityDeleter.entityCreated(entity2);
-        entityDeleter.entityCreated(entity3);
+        entityDeleter.onEntityCreated("entity1", entity1);
+        entityDeleter.onEntityCreated("entity2", entity2);
+        entityDeleter.onEntityCreated("entity3", entity3);
 
         entityDeleter.deleteAllEntities();
 
@@ -75,7 +75,7 @@ public class EntityDeleterTest {
     public void deletesAnEntityOnlyOnce() throws Exception {
         EntityDeleter entityDeleter = new EntityDeleter(entityManager);
         Object entity = new Object();
-        entityDeleter.entityCreated(entity);
+        entityDeleter.onEntityCreated("entity", entity);
 
         entityDeleter.deleteAllEntities();
         entityDeleter.deleteAllEntities();
@@ -86,7 +86,7 @@ public class EntityDeleterTest {
     @Test
     public void mergesDetachedEntitiesBeforeRemovingThem() throws Exception {
         Object entity = new Object();
-        entityDeleter.entityCreated(entity);
+        entityDeleter.onEntityCreated("entity", entity);
         when(entityManager.contains(entity)).thenReturn(false);
 
         entityDeleter.deleteAllEntities();
@@ -99,7 +99,7 @@ public class EntityDeleterTest {
     @Test
     public void doesNotMergeAttachedEntitiesBeforeRemovingThem() throws Exception {
         Object entity = new Object();
-        entityDeleter.entityCreated(entity);
+        entityDeleter.onEntityCreated("entity", entity);
         when(entityManager.contains(entity)).thenReturn(true);
 
         entityDeleter.deleteAllEntities();
@@ -112,7 +112,7 @@ public class EntityDeleterTest {
     @Test
     public void doesNotDeleteAlreadyRemovedEntities() throws Exception {
         Object entity = new Object();
-        entityDeleter.entityCreated(entity);
+        entityDeleter.onEntityCreated("entity", entity);
         when(entityManager.merge(entity)).thenThrow(IllegalArgumentException.class);
 
         entityDeleter.deleteAllEntities();

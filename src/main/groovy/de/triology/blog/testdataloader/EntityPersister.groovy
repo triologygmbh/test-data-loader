@@ -36,11 +36,8 @@ class EntityPersister implements EntityCreatedListener {
         this.entityManager = entityManager
     }
 
-    /**
-     * Persists the passed entity using this instance's {@link javax.persistence.EntityManager}.
-     * @param entity
-     */
-    void entityCreated(Object entity) {
+    @Override
+    public void onEntityCreated(String name, Object entity) {
         entityManager.persist(entity)
     }
 }

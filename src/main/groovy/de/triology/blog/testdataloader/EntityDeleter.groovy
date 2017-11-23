@@ -51,12 +51,8 @@ class EntityDeleter implements EntityCreatedListener {
         entities = new Stack()
     }
 
-    /**
-     * Keeps track of all created entities to be able to delete them later.
-     *
-     * @param entity a created entity
-     */
-    public void entityCreated(Object entity) {
+    @Override
+    public void onEntityCreated(String name, Object entity) {
         entities.push(entity)
     }
 
