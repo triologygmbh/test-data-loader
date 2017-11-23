@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package de.triology.blog.testdataloader.demo;
+package de.triology.blog.testdataloader.it;
 
 import de.triology.blog.testdataloader.TestDataLoader;
 import org.junit.After;
@@ -36,7 +36,7 @@ import java.util.Collections;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-public class Demo {
+public class TestDataLoaderIT {
 
     private EntityManager entityManager;
     private TestDataLoader testDataLoader;

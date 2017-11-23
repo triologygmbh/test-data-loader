@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package de.triology.blog.testdataloader.demo;
+package de.triology.blog.testdataloader.it;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
