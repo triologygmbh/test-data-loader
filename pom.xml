@@ -124,6 +124,7 @@
                 <version>2.19.1</version>
                 <configuration>
                     <includes>
+                        <include>**/*Test</include>
                         <include>de.triology.blog.testdataloader.demo.Demo</include>
                     </includes>
                 </configuration>
