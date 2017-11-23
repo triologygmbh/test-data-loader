@@ -28,8 +28,6 @@ import de.triology.blog.testdataloader.testentities.TestEntityWithToOneRelations
 
 import java.text.SimpleDateFormat
 
-import static de.triology.blog.testdataloader.EntityBuilder.create
-
 create BasicTestEntity, 'basicEntity', {
     stringProperty = 'a string value'
     integerProperty = 5
