@@ -37,9 +37,9 @@ class EntityBuilderDsl {
      * Creates an Instance of the specified  entityClass, registers it under the specified entityName and applies the
      * specified entityData definition
      *
-     * @param entityClass
-     * @param entityName
-     * @param entityData
+     * @param entityClass - the type defining the entity
+     * @param entityName - the name to reference the entity e.g. in another call to create
+     * @param entityData - a Closure used to build the entity
      * @return the created entity
      */
     public <T> T create(@DelegatesTo.Target Class<T> entityClass, String entityName,
@@ -48,6 +48,7 @@ class EntityBuilderDsl {
         T entity = createEntityInstance(entityName, entityClass)
 
         def rehydrated = entityData.rehydrate(entity, this, this)
+        rehydrated.resolveStrategy = Closure.DELEGATE_FIRST
         rehydrated.call()
 
         builder.fireEntityCreated(entityName, entity)
