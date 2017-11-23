@@ -32,7 +32,7 @@ import javax.persistence.EntityManager
  * Loads test data from entity definition files, saves them to a database via a specified {@link EntityManager} and
  * makes the entities available by their names as defined in the entity definition files.
  */
-class TestDataLoader {
+class TestDataLoader implements EntityCreatedListener {
 
     /**
      * Defines the transaction type that the {@link EntityManager} passed to the {@code TestDataLoader} is configured with.
@@ -43,8 +43,11 @@ class TestDataLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestDataLoader)
 
+    private Map<String, ?> loadedEntities = [:].withDefault {
+        throw new NoSuchElementException("an entity named '$it' has not been created")
+    }
+
     private EntityManager entityManager
-    private EntityBuilder entityBuilder
     private EntityDeleter entityDeleter
     private TransactionType transactionType;
 
@@ -77,10 +80,11 @@ class TestDataLoader {
      * @param transactionType {@link TransactionType}
      */
     TestDataLoader(EntityManager entityManager, TransactionType transactionType) {
-        if (transactionType == null) throw new IllegalArgumentException("transactionType must not be null")
+        if (transactionType == null) {
+            throw new IllegalArgumentException("transactionType must not be null")
+        }
         checkTransactionType(entityManager, transactionType)
         this.entityManager = entityManager
-        entityBuilder = EntityBuilder.instance()
         entityDeleter = new EntityDeleter(entityManager)
         this.transactionType = transactionType;
     }
@@ -110,22 +114,17 @@ class TestDataLoader {
      * definitions. The files are expected to be UTF-8 encoded.
      */
     void loadTestData(Collection<String> entityDefinitionFiles) {
-        withEntityPersisterAndDeleterListeningInTransaction {
+        EntityPersister persister = new EntityPersister(entityManager)
+        EntityBuilder entityBuilder = new EntityBuilder()
+                .addEntityCreatedListener(this)
+                .addEntityCreatedListener(persister)
+                .addEntityCreatedListener(entityDeleter)
+
+        withTransaction {
             entityDefinitionFiles.each {
-                entityBuilder.buildEntities(FileReader.create(it))
+                entityBuilder.build(FileReader.create(it))
             }
         }
-    }
-
-    private withEntityPersisterAndDeleterListeningInTransaction(Closure closure) {
-        EntityPersister persister = new EntityPersister(entityManager)
-        entityBuilder.addEntityCreatedListener(persister)
-        entityBuilder.addEntityCreatedListener(entityDeleter)
-        withTransaction {
-            closure()
-        }
-        entityBuilder.removeEntityCreatedListener(persister)
-        entityBuilder.removeEntityCreatedListener(entityDeleter)
     }
 
     /**
@@ -141,7 +140,14 @@ class TestDataLoader {
      * @return the requested entity
      */
     public <T> T getEntityByName(String name, Class<T> entityClass) {
-        return entityBuilder.getEntityByName(name, entityClass)
+        def entity = loadedEntities[name]
+
+        if (entityClass != entity.class) {
+            throw new IllegalArgumentException(
+            "The class of the requested entity named '$name' does not match the requested class. Requested: $entityClass, Actual: ${entity.class}")
+        }
+
+        return (T) entity;
     }
 
     /**
@@ -149,10 +155,8 @@ class TestDataLoader {
      * method and deletes all data from the database.
      */
     void clearEntityCacheAndDatabase() {
-        withTransaction {
-            entityDeleter.deleteAllEntities()
-            clearEntityCache()
-        }
+        withTransaction { entityDeleter.deleteAllEntities() }
+        clearEntityCache()
     }
 
     /**
@@ -160,7 +164,7 @@ class TestDataLoader {
      * method.
      */
     void clearEntityCache() {
-        entityBuilder.clear();
+        loadedEntities.clear();
     }
 
     private void withTransaction(Closure doWithinTransaction) {
@@ -188,4 +192,12 @@ class TestDataLoader {
         }
     }
 
+    @Override
+    public void onEntityCreated(String name, Object entity) {
+        loadedEntities[name]=entity
+    }
+
+    public void clear() {
+        loadedEntities.clear()
+    }
 }

@@ -1,0 +1,105 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2016 TRIOLOGY GmbH
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package de.triology.blog.testdataloader
+
+import spock.lang.Specification
+
+class EntityBuilderDslTest extends Specification {
+
+    static class SimpleClass {
+        String prop;
+    }
+
+    static class ComplexClass {
+        SimpleClass simple
+        String prop
+        ComplexClass complex
+    }
+
+    EntityBuilder builder
+    EntityBuilderDsl dsl
+
+    def setup() {
+        builder = Mock()
+        dsl = new EntityBuilderDsl(builder)
+    }
+
+    def "should create single instance and set single property" () {
+        given: "dsl configuration from setup"
+
+        when: "a simple entity class is created"
+        dsl.create(SimpleClass, "simple", { prop = "Value" })
+
+        then: "the builder receives an event with the specified name for the entity and the built entity"
+        1 * builder.fireEntityCreated("simple", { it.prop == "Value" })
+    }
+
+    def "should create multiple instances and set given properties" () {
+        given: "dsl configuration from setup"
+        SimpleClass capturedSimple
+
+        when: "two entites, a simple and a complex one are created"
+        dsl.create(ComplexClass, "complex", {
+            prop = "ComplexValue"
+            simple = create(SimpleClass, "simple", { prop = "SimpleValue" })
+            complex = complex
+        })
+
+        then: "the builder receives exactly two events, both with the specified name for the entity and the built entity"
+        1 * builder.fireEntityCreated("simple", {
+            it.prop == "SimpleValue"
+            capturedSimple = it
+        })
+        1 * builder.fireEntityCreated("complex", {
+            it.prop == "ComplexValue"
+            it.complex == it
+            it.simple == capturedSimple
+        })
+
+        0 * builder._
+    }
+
+    def "should throw exception when the referenced entity is not available" () {
+        given: "dsl configuration from setup"
+
+        when: "an attempt is made to create an entity by specifying another not existing entity"
+        dsl.create(ComplexClass, "complex", { simple = foo })
+
+        then: "an exception is thrown"
+        EntityBuildingException e = thrown()
+        e.message.contains("'foo' cannot be resolved")
+    }
+
+    def "should throw exception when entity name is reused" () {
+        given: "dsl configuration from setup"
+
+        when: "an attempt is made to create an entity using an already used name"
+        dsl.create(ComplexClass, "simple", { prop = "Value1" })
+        dsl.create(ComplexClass, "simple", { prop = "Value2" })
+
+        then: "an exception is thrown"
+        EntityBuildingException e = thrown()
+        e.message.contains("entity with that name already exists")
+    }
+}
