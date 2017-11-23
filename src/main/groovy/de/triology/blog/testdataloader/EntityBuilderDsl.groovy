@@ -57,7 +57,7 @@ class EntityBuilderDsl {
 
     private <T> T createEntityInstance(final String entityName, final Class<T> entityClass) {
         if (entitiesByName[entityName]) {
-            throw new EntityBuildingException(
+            throw new EntityBuilderException(
             "attempt to create an instance of $entityClass under the name of '$entityName' but an " +
             "entity with that name already exists: ${entitiesByName[entityName]}")
         }
@@ -78,6 +78,6 @@ class EntityBuilderDsl {
         if (entitiesByName[name]) {
             return entitiesByName[name]
         }
-        throw new EntityBuildingException("requested reference for entity with name '$name' cannot be resolved")
+        throw new EntityBuilderException("requested reference for entity with name '$name' cannot be resolved")
     }
 }

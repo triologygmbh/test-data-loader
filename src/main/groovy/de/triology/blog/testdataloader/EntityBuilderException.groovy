@@ -26,9 +26,9 @@ package de.triology.blog.testdataloader
 /**
  * A {@link RuntimeException} that can be used while building entities
  */
-class EntityBuildingException extends RuntimeException {
+class EntityBuilderException extends RuntimeException {
 
-    EntityBuildingException(String message) {
+    EntityBuilderException(String message) {
         super(message)
     }
 

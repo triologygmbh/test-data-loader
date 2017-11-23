@@ -87,7 +87,7 @@ class EntityBuilderDslTest extends Specification {
         dsl.create(ComplexClass, "complex", { simple = foo })
 
         then: "an exception is thrown"
-        EntityBuildingException e = thrown()
+        EntityBuilderException e = thrown()
         e.message.contains("'foo' cannot be resolved")
     }
 
@@ -99,7 +99,7 @@ class EntityBuilderDslTest extends Specification {
         dsl.create(ComplexClass, "simple", { prop = "Value2" })
 
         then: "an exception is thrown"
-        EntityBuildingException e = thrown()
+        EntityBuilderException e = thrown()
         e.message.contains("entity with that name already exists")
     }
 }
