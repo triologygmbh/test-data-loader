@@ -49,7 +49,7 @@ class TestDataLoader implements EntityBuilderListener {
 
     private EntityManager entityManager
     private EntityDeleter entityDeleter
-    private TransactionType transactionType;
+    private TransactionType transactionType
 
     /**
      * Creates a new TestDataLoader that uses the specified JPA EntityManager to save and delete entities.
@@ -86,7 +86,7 @@ class TestDataLoader implements EntityBuilderListener {
         checkTransactionType(entityManager, transactionType)
         this.entityManager = entityManager
         entityDeleter = new EntityDeleter(entityManager)
-        this.transactionType = transactionType;
+        this.transactionType = transactionType
     }
 
     private void checkTransactionType(EntityManager entityManager, TransactionType transactionType) {
@@ -147,7 +147,7 @@ class TestDataLoader implements EntityBuilderListener {
             "The class of the requested entity named '$name' does not match the requested class. Requested: $entityClass, Actual: ${entity.class}")
         }
 
-        return (T) entity;
+        return entity
     }
 
     /**
@@ -164,7 +164,7 @@ class TestDataLoader implements EntityBuilderListener {
      * method.
      */
     void clearEntityCache() {
-        loadedEntities.clear();
+        loadedEntities.clear()
     }
 
     private void withTransaction(Closure doWithinTransaction) {
@@ -172,7 +172,7 @@ class TestDataLoader implements EntityBuilderListener {
             withNewTransaction(doWithinTransaction)
         } else {
             // Someone else is taking care of transaction handling
-            doWithinTransaction();
+            doWithinTransaction()
         }
     }
 
@@ -188,7 +188,7 @@ class TestDataLoader implements EntityBuilderListener {
             entityManager.getTransaction().commit()
         } catch (Exception e) {
             e.printStackTrace()
-            entityManager.getTransaction().rollback();
+            entityManager.getTransaction().rollback()
         }
     }
 

@@ -39,7 +39,7 @@ class EntityDeleter implements EntityBuilderListener {
     private static final Logger LOG = LoggerFactory.getLogger(EntityDeleter)
 
     private EntityManager entityManager
-    private Stack entities;
+    private Stack entities
 
     /**
      * Creates an EntityDeleter that uses the specified EntityManager to delete entities.
