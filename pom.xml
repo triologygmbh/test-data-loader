@@ -34,8 +34,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.sources>src/main/groovy</sonar.sources>
-        <sonar.test.source>src/test/groovy</sonar.test.source>
         <sonar.groovy.jacoco.reportPath>target/jacoco.exec</sonar.groovy.jacoco.reportPath>
+        <sonar.groovy.jacoco.itReportPath>target/jacoco-it.exec</sonar.groovy.jacoco.itReportPath>
     </properties>
 
     <scm>
@@ -113,9 +113,11 @@
                 <configuration>
                     <includes>
                         <include>de.triology.blog.testdataloader.demo.Demo</include>
+                        <include>**/*Test.java</include>
                     </includes>
                 </configuration>
             </plugin>
+
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -240,16 +242,22 @@
 
             <build>
                 <plugins>
-
                     <!-- prepare jacoco agent for code coverage in sonar -->
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.7.9</version>
                         <executions>
                             <execution>
                                 <phase>initialize</phase>
                                 <goals>
                                     <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>agent-for-it</id>
+                                <goals>
+                                    <goal>prepare-agent-integration</goal>
                                 </goals>
                             </execution>
                         </executions>
