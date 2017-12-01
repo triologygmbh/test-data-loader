@@ -1,5 +1,5 @@
 #!groovy
-@Library('github.com/cloudogu/ces-build-lib@cd5a253')
+@Library('github.com/cloudogu/ces-build-lib@30fcc5b')
 import com.cloudogu.ces.cesbuildlib.*
 
 node {
@@ -33,7 +33,19 @@ node {
         }
 
         stage('Unit Test') {
-            mvn "test"
+            mvn 'test'
+        }
+
+        stage('Statical Code Analysis') {
+            def sonarQube = new SonarQube(this, 'sonarcloud.io')
+            sonarQube.updateAnalysisResultOfPullRequestsToGitHub('sonarqube-gh')
+            sonarQube.isUsingBranchPlugin = true
+
+            sonarQube.analyzeWith(mvn)
+
+            if (!sonarQube.waitForQualityGateWebhookToBeCalled()) {
+                currentBuild.result ='UNSTABLE'
+            }
         }
     }
 

@@ -1,5 +1,8 @@
 # test-data-loader 
 [![Build Status](https://opensource.triology.de/jenkins/buildStatus/icon?job=triologygmbh-github/test-data-loader/master)](https://opensource.triology.de/jenkins/blue/organizations/jenkins/triologygmbh-github%2Ftest-data-loader/branches)
+[![Quality Gates](https://sonarcloud.io/api/badges/gate?key=com.github.triologygmbh%3Atest-data-loader)](https://sonarcloud.io/dashboard?id=com.github.triologygmbh%3Atest-data-loader)
+[![Coverage](https://sonarcloud.io/api/badges/measure?key=com.github.triologygmbh%3Atest-data-loader&metric=coverage)](https://sonarcloud.io/dashboard?id=com.github.triologygmbh%3Atest-data-loader)
+[![Technical Debt](https://sonarcloud.io/api/badges/measure?key=com.github.triologygmbh%3Atest-data-loader&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard?id=com.github.triologygmbh%3Atest-data-loader)
 [![JitPack](https://jitpack.io/v//triologygmbh/test-data-loader.svg)](https://jitpack.io/#/triologygmbh/test-data-loader)
 
 ## Overview
