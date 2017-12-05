@@ -27,10 +27,10 @@ package de.triology.testdata.builder
 class EntityBuilder {
 
     private Map<String, ?> entitiesByName = [:]
-    private EntitiesScriptExecutor builder
+    private EntitiesScriptExecutor executor
 
-    protected EntityBuilder(final EntitiesScriptExecutor builder) {
-        this.builder = builder
+    protected EntityBuilder(final EntitiesScriptExecutor executor) {
+        this.executor = executor
     }
 
     /**
@@ -51,7 +51,7 @@ class EntityBuilder {
         rehydrated.resolveStrategy = Closure.DELEGATE_FIRST
         rehydrated.call()
 
-        builder.fireEntityCreated(entityName, entity)
+        executor.fireEntityCreated(entityName, entity)
         return entity
     }
 
