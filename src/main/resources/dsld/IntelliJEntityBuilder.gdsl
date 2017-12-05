@@ -1,0 +1,10 @@
+contributor(context(scope: scriptScope())) {
+    method name: "create", params: [entityClass: Class, entityName: String, entityData: Closure], type: Object
+}
+
+contributor(context(scope: closureScope())) {
+    def call = enclosingCall "create"
+    if (call) {
+        delegatesTo call.arguments[0] // doesn't work as expected. Actually doesn't work at all:(
+    }
+}
