@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.blog.testdataloader.testentities.AnotherTestEntity
-import de.triology.blog.testdataloader.testentities.BasicTestEntity
+import de.triology.testdata.loader.testentities.AnotherTestEntity
+import de.triology.testdata.loader.testentities.BasicTestEntity
 
 create BasicTestEntity, 'nameThatIsUsedTwoTimes', {}
 create AnotherTestEntity, 'nameThatIsUsedTwoTimes', {}

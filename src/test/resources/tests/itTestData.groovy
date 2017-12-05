@@ -21,19 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+import de.triology.testdata.loader.testentities.Department
+import de.triology.testdata.loader.testentities.User
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+create User, 'Peter', {
+    id = 123
+    firstName = 'Peter'
+    lastName = 'Pan'
+    login = 'pete'
+    email = 'peter.pan@example.com'
+    department = create Department, 'lostBoys', {
+        id = 999
+        name = 'The Lost Boys'
+        head = Peter
     }
 }
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
+create User, 'Tinker', {
+    id = 555
+    firstName = 'Tinker'
+    lastName = 'Bell'
+    department = lostBoys
+}
 
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
+create User, 'James', {
+    id = 987
+    firstName = 'James'
+    lastName = 'Hook'
+    login = 'CaptainHook'
+    email = 'james.hook@example.com'
 }

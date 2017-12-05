@@ -21,19 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.loader.testentities;
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+public class TestEntityWithToOneRelationship {
+
+    private Long id;
+    private BasicTestEntity referencedEntity;
+    private TestEntityWithToOneRelationship testEntityWithToOneRelationship;
+
+    public Long getId() {
+        return id;
     }
-}
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
+    public BasicTestEntity getReferencedEntity() {
+        return referencedEntity;
+    }
+
+    public void setReferencedEntity(BasicTestEntity referencedEntity) {
+        this.referencedEntity = referencedEntity;
+    }
+
+    public TestEntityWithToOneRelationship getTestEntityWithToOneRelationship() {
+        return testEntityWithToOneRelationship;
+    }
+
+    public void setTestEntityWithToOneRelationship(TestEntityWithToOneRelationship testEntityWithToOneRelationship) {
+        this.testEntityWithToOneRelationship = testEntityWithToOneRelationship;
+    }
 }

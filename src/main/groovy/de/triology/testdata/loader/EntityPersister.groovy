@@ -21,19 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.loader
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+import javax.persistence.EntityManager
+
+import de.triology.testdata.builder.EntityBuilderListener
+import groovy.transform.PackageScope
+
+/**
+ * An EntityCreatedListener that persists created entities.
+ */
+@PackageScope
+class EntityPersister implements EntityBuilderListener {
+
+    private EntityManager entityManager
+
+    EntityPersister(EntityManager entityManager) {
+        this.entityManager = entityManager
     }
-}
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
-
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
+    @Override
+    public void onEntityCreated(String name, Object entity) {
+        entityManager.persist(entity)
+    }
 }

@@ -21,19 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.loader.testentities;
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
+public class Department {
+
+    @Id
+    private Long id;
+
+    private String name;
+
+    @ManyToOne
+    private User head;
+
+    public Long getId() {
+        return id;
     }
-}
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public User getHead() {
+        return head;
+    }
+
+    public void setHead(User head) {
+        this.head = head;
+    }
 }

@@ -21,19 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.loader.testentities;
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+import java.util.Date;
+
+public class BasicTestEntity {
+
+    private Long id;
+    private String stringProperty;
+    private Integer integerProperty;
+    private Date dateProperty;
+
+    public Long getId() {
+        return id;
     }
-}
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
+    public String getStringProperty() {
+        return stringProperty;
+    }
+
+    public void setStringProperty(String stringProperty) {
+        this.stringProperty = stringProperty;
+    }
+
+    public Integer getIntegerProperty() {
+        return integerProperty;
+    }
+
+    public void setIntegerProperty(Integer integerProperty) {
+        this.integerProperty = integerProperty;
+    }
+
+    public Date getDateProperty() {
+        return dateProperty;
+    }
+
+    public void setDateProperty(Date dateProperty) {
+        this.dateProperty = dateProperty;
+    }
 }

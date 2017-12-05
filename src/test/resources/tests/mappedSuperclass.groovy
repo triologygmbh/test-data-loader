@@ -1,6 +1,6 @@
 package tests
 
-import de.triology.blog.testdataloader.testentities.InheritingEntity
+import de.triology.testdata.loader.testentities.InheritingEntity
 
 /**
  * MIT License

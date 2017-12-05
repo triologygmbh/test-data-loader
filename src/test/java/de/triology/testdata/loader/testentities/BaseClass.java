@@ -21,19 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.loader.testentities;
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
+public class BaseClass {
+
+    // Making this field protected is current workaround for making test-data-loader work with fields of base classes
+    protected String inheritedField;
+
+    public String getInheritedField() {
+        return inheritedField;
     }
-}
-
-create AnotherTestEntity, 'entityOfAnotherClass', {}
-
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
 }
