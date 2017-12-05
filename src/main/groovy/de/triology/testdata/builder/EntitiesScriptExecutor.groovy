@@ -26,18 +26,18 @@ package de.triology.testdata.builder
 import org.codehaus.groovy.control.CompilerConfiguration
 
 /**
- * Builder that takes the name of a file containing entity definitions and builds the entities accordingly.
+ * Executes a groovy script file with entity definitions.
  */
-class EntityBuilder {
+class EntitiesScriptExecutor {
 
     private List<EntityBuilderListener> listeners = []
 
     /**
-     * Builds the entities defined in the provided by the passed Reader.
+     * Executes a groovy script file with entity definitions provided by the passed Reader.
      *
-     * @param reader - a Reader for the file containing the entity definitions
+     * @param reader - a Reader for the file containing the entity definitions.
      */
-    public void build(Reader reader) {
+    public void execute(Reader reader) {
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration()
         compilerConfiguration.scriptBaseClass = EntityBuilderScript.class.name
 
@@ -53,7 +53,7 @@ class EntityBuilder {
      * Adds an {@link EntityBuilderListener} that gets notified every time an entity is completely created.
      * @param listener {@link EntityBuilderListener}
      */
-    public EntityBuilder addEntityBuilderListener(EntityBuilderListener listener) {
+    public EntitiesScriptExecutor addEntityBuilderListener(EntityBuilderListener listener) {
         listeners += listener
         return this
     }

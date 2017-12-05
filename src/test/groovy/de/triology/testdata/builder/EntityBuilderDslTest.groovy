@@ -23,7 +23,7 @@
  */
 package de.triology.testdata.builder
 
-import de.triology.testdata.builder.EntityBuilder
+import de.triology.testdata.builder.EntitiesScriptExecutor
 import de.triology.testdata.builder.EntityBuilderDsl
 import spock.lang.Specification
 
@@ -39,7 +39,7 @@ class EntityBuilderDslTest extends Specification {
         ComplexClass complex
     }
 
-    EntityBuilder builder
+    EntitiesScriptExecutor builder
     EntityBuilderDsl dsl
 
     def setup() {

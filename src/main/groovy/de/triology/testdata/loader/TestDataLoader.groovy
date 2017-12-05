@@ -26,7 +26,7 @@ package de.triology.testdata.loader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import de.triology.testdata.builder.EntityBuilder
+import de.triology.testdata.builder.EntitiesScriptExecutor
 import de.triology.testdata.builder.EntityBuilderListener
 import de.triology.testdata.util.FileReader
 
@@ -119,14 +119,14 @@ class TestDataLoader implements EntityBuilderListener {
      */
     void loadTestData(Collection<String> entityDefinitionFiles) {
         EntityPersister persister = new EntityPersister(entityManager)
-        EntityBuilder entityBuilder = new EntityBuilder()
+        EntitiesScriptExecutor entityBuilder = new EntitiesScriptExecutor()
                 .addEntityBuilderListener(this)
                 .addEntityBuilderListener(persister)
                 .addEntityBuilderListener(entityDeleter)
 
         withTransaction {
             entityDefinitionFiles.each {
-                entityBuilder.build(FileReader.create(it))
+                entityBuilder.execute(FileReader.create(it))
             }
         }
     }

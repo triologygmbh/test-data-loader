@@ -27,9 +27,9 @@ package de.triology.testdata.builder
 class EntityBuilderDsl {
 
     private Map<String, ?> entitiesByName = [:]
-    private EntityBuilder builder
+    private EntitiesScriptExecutor builder
 
-    protected EntityBuilderDsl(final EntityBuilder builder) {
+    protected EntityBuilderDsl(final EntitiesScriptExecutor builder) {
         this.builder = builder
     }
 

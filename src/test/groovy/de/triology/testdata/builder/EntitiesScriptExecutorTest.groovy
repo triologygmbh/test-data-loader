@@ -23,11 +23,11 @@
  */
 package de.triology.testdata.builder
 
-import de.triology.testdata.builder.EntityBuilder
+import de.triology.testdata.builder.EntitiesScriptExecutor
 import de.triology.testdata.builder.EntityBuilderListener
 import spock.lang.Specification
 
-class EntityBuilderTest extends Specification {
+class EntitiesScriptExecutorTest extends Specification {
 
     static class SimpleClass {
         String prop;
@@ -39,7 +39,7 @@ class EntityBuilderTest extends Specification {
         ComplexClass complex
     }
 
-    EntityBuilder builder = new EntityBuilder();
+    EntitiesScriptExecutor executor = new EntitiesScriptExecutor();
 
     def "should fire event for each registered listener" () {
         given: "multiple listeners, which have to be notified when the builder's method fireEntityCreated is called"
@@ -49,11 +49,11 @@ class EntityBuilderTest extends Specification {
         EntityBuilderListener listener1 = Mock()
         EntityBuilderListener listener2 = Mock()
 
-        builder.addEntityBuilderListener(listener1)
+        executor.addEntityBuilderListener(listener1)
                .addEntityBuilderListener(listener2)
 
         when: "the builder's method fireEntityCreated is called"
-        builder.fireEntityCreated(objName, builtObject)
+        executor.fireEntityCreated(objName, builtObject)
 
         then: "the onEntityCreated method of each listener is invoked"
         2 * _.onEntityCreated(objName, builtObject)
@@ -64,8 +64,8 @@ class EntityBuilderTest extends Specification {
         SimpleClass capturedSimple
 
         def entityDefinition = """
-            import de.triology.testdata.builder.EntityBuilderTest.SimpleClass
-            import de.triology.testdata.builder.EntityBuilderTest.ComplexClass
+            import de.triology.testdata.builder.EntitiesScriptExecutorTest.SimpleClass
+            import de.triology.testdata.builder.EntitiesScriptExecutorTest.ComplexClass
 
             create ComplexClass, "complex", {
                 prop = "ComplexValue"
@@ -76,10 +76,10 @@ class EntityBuilderTest extends Specification {
 
         and: "an entity builder instance with registered listeners"
         EntityBuilderListener listener = Mock()
-        builder.addEntityBuilderListener(listener)
+        executor.addEntityBuilderListener(listener)
 
         when: "the script is processed"
-        builder.build(new StringReader(entityDefinition))
+        executor.execute(new StringReader(entityDefinition))
 
         then: "the registered listener get notified for each created object"
         1 * listener.onEntityCreated("simple", {
