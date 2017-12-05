@@ -24,10 +24,10 @@
 package de.triology.testdata.builder
 
 import de.triology.testdata.builder.EntitiesScriptExecutor
-import de.triology.testdata.builder.EntityBuilderDsl
+import de.triology.testdata.builder.EntityBuilder
 import spock.lang.Specification
 
-class EntityBuilderDslTest extends Specification {
+class EntityBuilderTest extends Specification {
 
     static class SimpleClass {
         String prop;
@@ -39,22 +39,22 @@ class EntityBuilderDslTest extends Specification {
         ComplexClass complex
     }
 
-    EntitiesScriptExecutor builder
-    EntityBuilderDsl dsl
+    EntitiesScriptExecutor executor
+    EntityBuilder builder
 
     def setup() {
-        builder = Mock()
-        dsl = new EntityBuilderDsl(builder)
+        executor = Mock()
+        builder = new EntityBuilder(executor)
     }
 
     def "should create single instance and set single property" () {
         given: "dsl configuration from setup"
 
         when: "a simple entity class is created"
-        dsl.create(SimpleClass, "simple", { prop = "Value" })
+        builder.create(SimpleClass, "simple", { prop = "Value" })
 
         then: "the builder receives an event with the specified name for the entity and the built entity"
-        1 * builder.fireEntityCreated("simple", { it.prop == "Value" })
+        1 * executor.fireEntityCreated("simple", { it.prop == "Value" })
     }
 
     def "should create multiple instances and set given properties" () {
@@ -62,31 +62,31 @@ class EntityBuilderDslTest extends Specification {
         SimpleClass capturedSimple
 
         when: "two entites, a simple and a complex one are created"
-        dsl.create(ComplexClass, "complex", {
+        builder.create(ComplexClass, "complex", {
             prop = "ComplexValue"
             simple = create(SimpleClass, "simple", { prop = "SimpleValue" })
             complex = complex
         })
 
         then: "the builder receives exactly two events, both with the specified name for the entity and the built entity"
-        1 * builder.fireEntityCreated("simple", {
+        1 * executor.fireEntityCreated("simple", {
             it.prop == "SimpleValue"
             capturedSimple = it
         })
-        1 * builder.fireEntityCreated("complex", {
+        1 * executor.fireEntityCreated("complex", {
             it.prop == "ComplexValue"
             it.complex == it
             it.simple == capturedSimple
         })
 
-        0 * builder._
+        0 * executor._
     }
 
     def "should throw exception when the referenced entity is not available" () {
         given: "dsl configuration from setup"
 
         when: "an attempt is made to create an entity by specifying another not existing entity"
-        dsl.create(ComplexClass, "complex", { simple = foo })
+        builder.create(ComplexClass, "complex", { simple = foo })
 
         then: "an exception is thrown"
         EntityBuilderException e = thrown()
@@ -97,8 +97,8 @@ class EntityBuilderDslTest extends Specification {
         given: "dsl configuration from setup"
 
         when: "an attempt is made to create an entity using an already used name"
-        dsl.create(ComplexClass, "simple", { prop = "Value1" })
-        dsl.create(ComplexClass, "simple", { prop = "Value2" })
+        builder.create(ComplexClass, "simple", { prop = "Value1" })
+        builder.create(ComplexClass, "simple", { prop = "Value2" })
 
         then: "an exception is thrown"
         EntityBuilderException e = thrown()

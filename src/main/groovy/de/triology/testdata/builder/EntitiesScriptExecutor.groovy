@@ -42,7 +42,7 @@ class EntitiesScriptExecutor {
         compilerConfiguration.scriptBaseClass = EntityBuilderScript.class.name
 
         Binding binding = new Binding()
-        binding.dsl = new EntityBuilderDsl(this)
+        binding.builder = new EntityBuilder(this)
 
         GroovyShell shell = new GroovyShell(this.class.classLoader, binding, compilerConfiguration)
         Script script =  shell.parse(reader)

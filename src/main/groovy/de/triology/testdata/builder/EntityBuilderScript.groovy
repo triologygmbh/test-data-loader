@@ -28,5 +28,5 @@ abstract class EntityBuilderScript extends Script {
 
     @Delegate
     @Lazy
-    EntityBuilderDsl dsl = this.binding.dsl
+    EntityBuilder builder = this.binding.builder
 }
