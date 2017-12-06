@@ -119,14 +119,14 @@ class TestDataLoader implements EntityBuilderListener {
      */
     void loadTestData(Collection<String> entityDefinitionFiles) {
         EntityPersister persister = new EntityPersister(entityManager)
-        EntitiesScriptExecutor entityBuilder = new EntitiesScriptExecutor()
+        EntitiesScriptExecutor scriptExecutor = new EntitiesScriptExecutor()
                 .addEntityBuilderListener(this)
                 .addEntityBuilderListener(persister)
                 .addEntityBuilderListener(entityDeleter)
 
         withTransaction {
             entityDefinitionFiles.each {
-                entityBuilder.execute(FileReader.create(it))
+                scriptExecutor.execute(FileReader.create(it))
             }
         }
     }
