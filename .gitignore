@@ -1,5 +1,12 @@
-
+# general
 /target/
 /TestDataLoader.iml
+
+# IDEA specific
 *.iml
 /.idea/
+
+# eclipse specific
+.classpath
+.project
+.settings/

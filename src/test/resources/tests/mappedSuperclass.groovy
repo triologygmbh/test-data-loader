@@ -1,6 +1,6 @@
 package tests
 
-import de.triology.blog.testdataloader.testentities.InheritingEntity
+import de.triology.testdata.loader.testentities.InheritingEntity
 
 /**
  * MIT License
@@ -25,8 +25,6 @@ import de.triology.blog.testdataloader.testentities.InheritingEntity
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import static de.triology.blog.testdataloader.EntityBuilder.create
 
 create(InheritingEntity, "inherited") {
     inheritedField = "this Field is privately defined in the superclass"

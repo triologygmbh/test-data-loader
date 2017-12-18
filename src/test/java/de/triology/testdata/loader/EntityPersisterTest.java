@@ -21,19 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.loader;
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+import org.junit.Test;
+
+import de.triology.testdata.loader.EntityPersister;
+
+import javax.persistence.EntityManager;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+public class EntityPersisterTest {
+
+    @Test
+    public void persistsCreatedEntities() throws Exception {
+        EntityManager entityManagerMock = mock(EntityManager.class);
+        EntityPersister entityPersister = new EntityPersister(entityManagerMock);
+        Object entity = new Object();
+        entityPersister.onEntityCreated("entity1", entity);
+        verify(entityManagerMock).persist(entity);
     }
-}
-
-create AnotherTestEntity, 'entityOfAnotherClass', {}
-
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
 }

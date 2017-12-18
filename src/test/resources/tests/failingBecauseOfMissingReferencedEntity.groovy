@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.blog.testdataloader.testentities.TestEntityWithToOneRelationship
-
-import static de.triology.blog.testdataloader.EntityBuilder.create
+import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
 
 create TestEntityWithToOneRelationship, 'entityReferencingANonexistingEntity', {
     referencedEntity = notExistingReference

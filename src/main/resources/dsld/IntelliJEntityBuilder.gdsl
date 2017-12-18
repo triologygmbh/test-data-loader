@@ -1,0 +1,4 @@
+contributor(context(scope: scriptScope())) {
+    def clazz = findClass("de.triology.testdata.builder.EntityBuilder")
+    add clazz.methods.find { it.name=="create" }
+}

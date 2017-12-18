@@ -21,19 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.loader.testentities;
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+import java.util.Collection;
+
+public class TestEntityWithToManyRelationship {
+
+    private Long id;
+    Collection<BasicTestEntity> toManyRelationship;
+
+    public Long getId() {
+        return id;
     }
-}
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
+    public Collection<BasicTestEntity> getToManyRelationship() {
+        return toManyRelationship;
+    }
+
+    public void setToManyRelationship(Collection<BasicTestEntity> toManyRelationship) {
+        this.toManyRelationship = toManyRelationship;
+    }
 }

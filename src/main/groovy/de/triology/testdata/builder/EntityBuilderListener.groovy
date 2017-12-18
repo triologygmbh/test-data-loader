@@ -21,19 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.builder
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
-    }
-}
+/**
+ * Listener for entity creation. Gets notified every time an entity is completely created.
+ */
+interface EntityBuilderListener {
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
+    /**
+     * Is called every time an entity is completely created, including all referenced entities.
+     *
+     * @param name the name of the entity created
+     * @param entity the created entity
+     */
+    void onEntityCreated(String name, Object entity)
 
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
 }

@@ -21,19 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import de.triology.testdata.loader.testentities.AnotherTestEntity
-import de.triology.testdata.loader.testentities.BasicTestEntity
-import de.triology.testdata.loader.testentities.TestEntityWithToOneRelationship
+package de.triology.testdata.util;
 
-create TestEntityWithToOneRelationship, 'entityWithToOneRelationship', {
-    referencedEntity = create BasicTestEntity, 'referencedInstance', {
-        stringProperty = 'string in referenced entity'
-        integerProperty = 222
+import org.junit.Test;
+
+import de.triology.testdata.util.FileReader;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Reader;
+
+import static org.junit.Assert.assertEquals;
+
+public class FileReaderTest {
+
+    @Test(expected = FileNotFoundException.class)
+    public void throwsAFileNotFoundExceptionIfFieleDoesNotExist() throws Exception {
+        FileReader.create("/not/existing");
     }
-}
 
-create AnotherTestEntity, 'entityOfAnotherClass', {}
+    @Test
+    public void createsReaderForFileInClassPath() throws Exception {
+        Reader reader = FileReader.create("tests/FileReaderTestFile");
+        assertReaderIsSetup(reader);
+    }
 
-create TestEntityWithToOneRelationship, 'anotherEntityWithToOneRelationship', {
-    referencedEntity = referencedInstance
+    @Test
+    public void createReaderForFileInFileSystem() throws Exception {
+        Reader reader = FileReader.create("src/test/resources/tests/FileReaderTestFile");
+        assertReaderIsSetup(reader);
+    }
+
+    private void assertReaderIsSetup(Reader reader) throws IOException {
+        char[] chars = new char[7];
+        reader.read(chars);
+        assertEquals("success", new String(chars));
+    }
 }
