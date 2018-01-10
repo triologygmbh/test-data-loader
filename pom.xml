@@ -31,6 +31,51 @@
     <artifactId>test-data-loader</artifactId>
     <version>0.2.2-SNAPSHOT</version>
 
+    <name>test-data-loader</name>
+    <description>A Groovy DSL for creating test data via JPA </description>
+    <url>https://github.com/triologygmbh/test-data-loader</url>
+    <inceptionYear>2016</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/triologygmbh/command-bus/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>TRIOLOGY GmbH</name>
+        <url>https://www.triology.de/</url>
+    </organization>
+
+    <developers>
+
+        <developer>
+            <name>Daniel Behrwind</name>
+            <email>daniel.behrwind@triology.de</email>
+            <organization>TRIOLOGY GmbH</organization>
+            <organizationUrl>https://www.triology.de/</organizationUrl>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+
+        <developer>
+            <name>Philipp Czora</name>
+            <email>philipp.czora@triology.de</email>
+            <organization>TRIOLOGY GmbH</organization>
+            <organizationUrl>https://www.triology.de/</organizationUrl>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+
+        <developer>
+            <name>Johannes Schnatterer</name>
+            <email>johannes.schnatterer@triology.de</email>
+            <organization>TRIOLOGY GmbH</organization>
+            <organizationUrl>https://www.triology.de/</organizationUrl>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.sources>src/main/groovy</sonar.sources>
@@ -219,6 +264,20 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
