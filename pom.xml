@@ -81,6 +81,10 @@
         <sonar.sources>src/main/groovy</sonar.sources>
         <sonar.groovy.jacoco.reportPath>target/jacoco.exec</sonar.groovy.jacoco.reportPath>
         <sonar.groovy.jacoco.itReportPath>target/jacoco-it.exec</sonar.groovy.jacoco.itReportPath>
+
+        <!-- Possibility to skip only the unit test. Can be useful when running only integration tests.
+              This can be used from the command line as follows: mvn <goals> -DskipUnitTests -->
+        <skipUnitTests>${skipTests}</skipUnitTests>
     </properties>
 
     <scm>
@@ -171,6 +175,9 @@
                     <includes>
                         <include>**/*Test</include>
                     </includes>
+                    <!-- skips surefire tests without skipping failsafe tests.
+                     Property value seems to magically default to false -->
+                    <skipTests>${skipUnitTests}</skipTests>
                 </configuration>
             </plugin>
 

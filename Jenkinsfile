@@ -1,5 +1,5 @@
 #!groovy
-@Library('github.com/cloudogu/ces-build-lib@888733b')
+@Library('github.com/cloudogu/ces-build-lib@d207c94')
 import com.cloudogu.ces.cesbuildlib.*
 
 node {
@@ -33,7 +33,11 @@ node {
         }
 
         stage('Unit Test') {
-            mvn "test"
+            mvn 'test'
+        }
+
+        stage('Integration Test') {
+            mvn 'verify -DskipUnitTests'
         }
     }
 
