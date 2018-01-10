@@ -24,7 +24,7 @@ node {
             /* Don't remove folders starting in "." like
              * .m2 (maven), .npm, .cache, .local (bower)
              */
-            git.clean('".*/"')
+            git.clean('')
         }
 
         stage('Build') {
