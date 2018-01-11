@@ -29,7 +29,7 @@
 
     <groupId>de.triology.test-data-loader</groupId>
     <artifactId>test-data-loader</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>test-data-loader</name>
     <description>A Groovy DSL for creating test data via JPA </description>
