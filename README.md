@@ -1,6 +1,6 @@
 # test-data-loader 
 [![Build Status](https://opensource.triology.de/jenkins/buildStatus/icon?job=triologygmbh-github/test-data-loader/master)](https://opensource.triology.de/jenkins/blue/organizations/jenkins/triologygmbh-github%2Ftest-data-loader/branches)
-[![JitPack](https://jitpack.io/v//triologygmbh/test-data-loader.svg)](https://jitpack.io/#/triologygmbh/test-data-loader)
+[![Maven Central](https://img.shields.io/maven-central/v/de.triology.test-data-loader/test-data-loader.svg)](http://search.maven.org/#search|gav|1|g%3A%22de.triology.test-data-loader%22%20AND%20a%3A%22test-data-loader%22)
 
 ## Overview
 This project implements a Groovy DSL that can be used to populate a database using JPA entities. Its indented use is testing but it could be used in other scenarios as well.
@@ -28,7 +28,6 @@ E.g. for maven
 Current version is [![Maven Central](https://img.shields.io/maven-central/v/de.triology.test-data-loader/test-data-loader.svg)](http://search.maven.org/#search|gav|1|g%3A%22de.triology.test-data-loader%22%20AND%20a%3A%22test-data-loader%22)
 
 You can get snapshot versions from maven central (for the most recent commit on develop branch) or via [JitPack](https://jitpack.io/#triologygmbh/test-data-loader) (note that JitPack uses different maven coordinates).  
-[![JitPack](https://jitpack.io/v/triologygmbh/test-data-loader.svg)](https://jitpack.io/#triologygmbh/test-data-loader)
 
 ## Usage
 An example entity definition Groovy script file can be found here: https://github.com/triologygmbh/test-data-loader/blob/master/src/test/resources/tests/itTestData.groovy
