@@ -13,26 +13,22 @@ The original article (🇩🇪) can be found here: [Eine Groovy-DSL zum Erzeugen
 Please note that from version 1.x the implementation as described in the article referenced above has changed. For more information about the changes, please refer to the release notes of each [release](https://github.com/triologygmbh/test-data-loader/releases).
 
 ## Configuration
-You can use JitPack to configure the test-data-loader as a dependency in your project.<br/>
-For example when using maven, define the JitPack repository:
-```XML
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-And the test-data-loader dependency:
+
+Add the [latest stable version of test-data-loader](http://search.maven.org/#search|gav|1|g%3A%22de.triology.test-data-loader%22%20AND%20a%3A%22test-data-loader%22) to the dependency management tool of your choice.
+
+E.g. for maven
+
 ```XML
 <dependency>
-    <groupId>com.github.triologygmbh</groupId>
+    <groupId>de.triology.test-data-loader</groupId>
     <artifactId>test-data-loader</artifactId>
-    <version>${version.test-data-loader}</version>
+    <version>1.0.0</version>
 </dependency>
 ```
-Current version is [![](https://jitpack.io/v/triologygmbh/test-data-loader.svg)](https://jitpack.io/#triologygmbh/test-data-loader).<br/> 
-For further details and options refer to the [JitPack website](https://jitpack.io/#triologygmbh/test-data-loader).
+Current version is [![Maven Central](https://img.shields.io/maven-central/v/de.triology.test-data-loader/test-data-loader.svg)](http://search.maven.org/#search|gav|1|g%3A%22de.triology.test-data-loader%22%20AND%20a%3A%22test-data-loader%22)
+
+You can get snapshot versions from maven central (for the most recent commit on develop branch) or via [JitPack](https://jitpack.io/#triologygmbh/test-data-loader) (note that JitPack uses different maven coordinates).  
+[![JitPack](https://jitpack.io/v/triologygmbh/test-data-loader.svg)](https://jitpack.io/#triologygmbh/test-data-loader)
 
 ## Usage
 An example entity definition Groovy script file can be found here: https://github.com/triologygmbh/test-data-loader/blob/master/src/test/resources/tests/itTestData.groovy
